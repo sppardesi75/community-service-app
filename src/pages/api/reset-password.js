@@ -1,41 +1,32 @@
-import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
 import { connectToDatabase } from "../../lib/mongodb";
 import User from "../../models/User";
+import bcrypt from "bcryptjs";
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
+  if (req.method !== "POST") return res.status(405).end();
 
   const { token, password } = req.body;
 
   if (!token || !password) {
-    return res.status(400).json({ error: "Token and password are required" });
+    return res.status(400).json({ error: "Token and password required." });
   }
 
-  try {
-    // ✅ Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const userId = decoded.userId;
+  await connectToDatabase();
 
-    await connectToDatabase();
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
+  const user = await User.findOne({
+    resetToken: token,
+    resetTokenExpiry: { $gt: Date.now() },
+  });
 
-    // ✅ Hash new password
-    const hashedPassword = await bcrypt.hash(password, 10);
-    user.password = hashedPassword;
-    await user.save();
-
-    res.status(200).json({ message: "Password reset successful" });
-  } catch (err) {
-    console.error("Reset error:", err);
-    if (err.name === "TokenExpiredError") {
-      return res.status(400).json({ error: "Reset token expired" });
-    }
-    return res.status(500).json({ error: "Server error" });
+  if (!user) {
+    return res.status(400).json({ error: "Invalid or expired token." });
   }
+
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(password, salt);
+  user.resetToken = undefined;
+  user.resetTokenExpiry = undefined;
+  await user.save();
+
+  res.status(200).json({ message: "Password has been reset." });
 }

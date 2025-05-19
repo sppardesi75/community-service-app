@@ -10,16 +10,22 @@ export default function ForgotPassword() {
     setError("");
     setMessage("");
 
-    const res = await fetch("/api/forgot-password", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
+    try {
+      const res = await fetch("/api/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
 
-    const data = await res.json();
-    if (!res.ok) return setError(data.error || "Something went wrong");
-
-    setMessage("If your email is registered, check your inbox for reset instructions.");
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "Something went wrong");
+      } else {
+        setMessage("If your email is registered, check your inbox for reset instructions.");
+      }
+    } catch (err) {
+      setError("Failed to send reset email. Try again later.");
+    }
   };
 
   return (

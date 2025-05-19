@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 export default function ResetPassword() {
@@ -14,6 +14,11 @@ export default function ResetPassword() {
     e.preventDefault();
     setMessage("");
     setError("");
+
+    if (!token) {
+      setError("Invalid or missing reset token.");
+      return;
+    }
 
     if (!password || password.length < 6) {
       return setError("Password must be at least 6 characters");
