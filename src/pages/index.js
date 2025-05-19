@@ -91,7 +91,7 @@ export default function HomePage() {
     </p>
     <p>
       Built by a passionate team of developers, our goal is to simplify civic engagement and ensure local problems are addressed faster and more effectively.
-      Whether you're reporting an issue or managing municipal responses, the Community Service App is your gateway to a cleaner, safer, and more responsive Ontario.
+      Whether you are reporting an issue or managing municipal responses, the Community Service App is your gateway to a cleaner, safer, and more responsive Ontario.
     </p>
   </div>
 </section>
