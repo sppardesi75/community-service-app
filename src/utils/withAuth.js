@@ -37,7 +37,7 @@ export default function withAuth(Component, allowedRoles = []) {
         localStorage.removeItem("user");
         router.replace("/login");
       }
-    }, []);
+    }, [router]);
 
     return <Component {...props} />;
   };

@@ -35,7 +35,7 @@ export default function ForgotPassword() {
         <h1 className="text-5xl font-extrabold text-orange-500 leading-tight">
           Forgot<br />Your<br />Password?
         </h1>
-        <p className="mt-6 text-lg text-gray-300">Don't worry! We'll help you get back in.</p>
+        <p className="mt-6 text-lg text-gray-300">Don&apos;t worry! We&apos;ll help you get back in.</p>
       </div>
 
       {/* Right Panel */}
