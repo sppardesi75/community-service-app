@@ -49,38 +49,49 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-100">
-      <form onSubmit={handleReset} className="bg-white p-8 rounded shadow-md w-full max-w-sm">
-        <h2 className="text-2xl font-bold mb-4 text-center">Reset Password</h2>
+    <div className="flex min-h-screen font-sans">
+      {/* Left Panel */}
+      <div className="w-1/2 bg-black text-white flex flex-col justify-center items-start pl-20">
+        <h1 className="text-5xl font-extrabold text-orange-500 leading-tight">
+          Reset<br />Your<br />Password
+        </h1>
+        <p className="mt-6 text-lg text-gray-300">Set a new password to access your account.</p>
+      </div>
 
-        <input
-          type="password"
-          placeholder="New Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full border px-3 py-2 mb-4"
-          required
-        />
+      {/* Right Panel */}
+      <div className="w-1/2 bg-[#fdfaf5] flex items-center justify-center">
+        <form onSubmit={handleReset} className="w-full max-w-sm px-4">
+          <h2 className="text-2xl font-semibold text-black mb-10 text-center">Enter New Password</h2>
 
-        <input
-          type="password"
-          placeholder="Confirm New Password"
-          value={confirm}
-          onChange={(e) => setConfirm(e.target.value)}
-          className="w-full border px-3 py-2 mb-4"
-          required
-        />
+          <input
+            type="password"
+            placeholder="New Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="w-full mb-6 bg-transparent border-b border-gray-400 focus:outline-none focus:border-black py-2 placeholder:text-gray-600"
+          />
 
-        {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
-        {message && <p className="text-green-600 text-sm mb-3">{message}</p>}
+          <input
+            type="password"
+            placeholder="Confirm New Password"
+            value={confirm}
+            onChange={(e) => setConfirm(e.target.value)}
+            required
+            className="w-full mb-6 bg-transparent border-b border-gray-400 focus:outline-none focus:border-black py-2 placeholder:text-gray-600"
+          />
 
-        <button
-          type="submit"
-          className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded"
-        >
-          Reset Password
-        </button>
-      </form>
+          {message && <p className="text-green-600 text-sm mb-4">{message}</p>}
+          {error && <p className="text-red-600 text-sm mb-4">{error}</p>}
+
+          <button
+            type="submit"
+            className="bg-orange-500 hover:bg-orange-600 text-white w-full py-2 rounded-full font-semibold shadow-md transition"
+          >
+            Reset Password
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
