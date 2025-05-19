@@ -7,11 +7,22 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Only POST requests allowed" });
   }
 
-  const { name, email, password, role } = req.body;
+const { name, email, password, role } = req.body;
 
-  if (!name || !email || !password) {
-    return res.status(400).json({ error: "Name, email, and password are required" });
-  }
+if (!name || !email || !password) {
+  return res.status(400).json({ error: "Name, email, and password are required" });
+}
+
+// Strong password pattern
+const passwordRegex =
+  /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_+=])[A-Za-z\d@$!%*?&#^()_+=]{8,}$/;
+
+if (!passwordRegex.test(password)) {
+  return res.status(400).json({
+    error: "Password must be at least 8 characters and include one uppercase letter, one number, and one special character.",
+  });
+}
+
 
   try {
     await connectToDatabase();

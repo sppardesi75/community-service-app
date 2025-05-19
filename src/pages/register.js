@@ -10,14 +10,41 @@ export default function Register() {
     confirm: "",
   });
   const [error, setError] = useState("");
+  const [showRules, setShowRules] = useState(false);
+  const [passwordRules, setPasswordRules] = useState({
+    length: false,
+    uppercase: false,
+    number: false,
+    special: false,
+  });
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+
+    if (name === "password") {
+      setPasswordRules({
+        length: value.length >= 8,
+        uppercase: /[A-Z]/.test(value),
+        number: /[0-9]/.test(value),
+        special: /[@$!%*?&#^()_+=]/.test(value),
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
+    const passwordRegex =
+      /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_+=])[A-Za-z\d@$!%*?&#^()_+=]{8,}$/;
+
+    if (!passwordRegex.test(form.password)) {
+      setError(
+        "Password must be at least 8 characters and include one uppercase letter, one number, and one special character."
+      );
+      return;
+    }
 
     if (form.password !== form.confirm) {
       setError("Passwords do not match");
@@ -86,17 +113,36 @@ export default function Register() {
             />
           </div>
 
-          <div className="mb-6">
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={form.password}
-              onChange={handleChange}
-              className="w-full bg-transparent border-b border-gray-400 focus:outline-none focus:border-black py-2 placeholder:text-gray-600"
-              required
-            />
-          </div>
+<div className="mb-6">
+  <input
+    type="password"
+    name="password"
+    placeholder="Password"
+    value={form.password}
+    onChange={handleChange}
+    onFocus={() => setShowRules(true)}
+    onBlur={() => form.password === "" && setShowRules(false)}
+    className="w-full bg-transparent border-b border-gray-400 focus:outline-none focus:border-black py-2 placeholder:text-gray-600"
+    required
+  />
+
+  {showRules && (
+    <ul className="mt-2 ml-2 text-sm">
+      <li className={passwordRules.length ? "text-green-600" : "text-red-500"}>
+        {passwordRules.length ? "✔" : "✘"} At least 8 characters
+      </li>
+      <li className={passwordRules.uppercase ? "text-green-600" : "text-red-500"}>
+        {passwordRules.uppercase ? "✔" : "✘"} One uppercase letter
+      </li>
+      <li className={passwordRules.number ? "text-green-600" : "text-red-500"}>
+        {passwordRules.number ? "✔" : "✘"} One number
+      </li>
+      <li className={passwordRules.special ? "text-green-600" : "text-red-500"}>
+        {passwordRules.special ? "✔" : "✘"} One special character
+      </li>
+    </ul>
+  )}
+</div>
 
           <div className="mb-8">
             <input

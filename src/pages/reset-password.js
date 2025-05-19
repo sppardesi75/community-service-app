@@ -10,6 +10,13 @@ export default function ResetPassword() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
+  const passwordRules = {
+    length: password.length >= 8,
+    upper: /[A-Z]/.test(password),
+    number: /\d/.test(password),
+    special: /[@$!%*?&#^()_+=]/.test(password),
+  };
+
   const handleReset = async (e) => {
     e.preventDefault();
     setMessage("");
@@ -20,8 +27,9 @@ export default function ResetPassword() {
       return;
     }
 
-    if (!password || password.length < 6) {
-      return setError("Password must be at least 6 characters");
+    const allRulesPassed = Object.values(passwordRules).every(Boolean);
+    if (!allRulesPassed) {
+      return setError("Password does not meet strength requirements.");
     }
 
     if (password !== confirm) {
@@ -61,7 +69,7 @@ export default function ResetPassword() {
       {/* Right Panel */}
       <div className="w-1/2 bg-[#fdfaf5] flex items-center justify-center">
         <form onSubmit={handleReset} className="w-full max-w-sm px-4">
-          <h2 className="text-2xl font-semibold text-black mb-10 text-center">Enter New Password</h2>
+          <h2 className="text-2xl font-semibold text-black mb-6 text-center">Enter New Password</h2>
 
           <input
             type="password"
@@ -69,8 +77,23 @@ export default function ResetPassword() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="w-full mb-6 bg-transparent border-b border-gray-400 focus:outline-none focus:border-black py-2 placeholder:text-gray-600"
+            className="w-full mb-4 bg-transparent border-b border-gray-400 focus:outline-none focus:border-black py-2 placeholder:text-gray-600"
           />
+
+          <ul className="text-sm mb-4">
+            <li className={passwordRules.length ? "text-green-600" : "text-red-500"}>
+              • At least 8 characters
+            </li>
+            <li className={passwordRules.upper ? "text-green-600" : "text-red-500"}>
+              • One uppercase letter
+            </li>
+            <li className={passwordRules.number ? "text-green-600" : "text-red-500"}>
+              • One number
+            </li>
+            <li className={passwordRules.special ? "text-green-600" : "text-red-500"}>
+              • One special character
+            </li>
+          </ul>
 
           <input
             type="password"
@@ -78,11 +101,11 @@ export default function ResetPassword() {
             value={confirm}
             onChange={(e) => setConfirm(e.target.value)}
             required
-            className="w-full mb-6 bg-transparent border-b border-gray-400 focus:outline-none focus:border-black py-2 placeholder:text-gray-600"
+            className="w-full mb-4 bg-transparent border-b border-gray-400 focus:outline-none focus:border-black py-2 placeholder:text-gray-600"
           />
 
-          {message && <p className="text-green-600 text-sm mb-4">{message}</p>}
-          {error && <p className="text-red-600 text-sm mb-4">{error}</p>}
+          {message && <p className="text-green-600 text-sm mb-3">{message}</p>}
+          {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
 
           <button
             type="submit"
