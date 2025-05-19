@@ -10,7 +10,7 @@ export const transporter = nodemailer.createTransport({
 });
 
 export const sendResetEmail = async (to, token) => {
-  const resetUrl = `http://localhost:3000/reset-password?token=${token}`;
+  const resetUrl = `https://community-service-ldq73sl87-sanskarpardesi-gmailcoms-projects.vercel.app/reset-password?token=${token}`;
   await transporter.sendMail({
     from: '"Community Service App" <noreply@communityapp.ca>',
     to,
