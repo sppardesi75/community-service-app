@@ -42,83 +42,70 @@ export default function Register() {
       }
 
       router.push("/login");
-    } catch (err) {
+    } catch {
       setError("An unexpected error occurred");
     }
   };
 
   return (
-    <div className="flex min-h-screen">
-      {/* Left branding panel */}
-      <div className="w-1/2 bg-black text-white flex items-center justify-center p-10">
-        <div>
-          <h1 className="text-3xl font-bold mb-4">Community Service App</h1>
-          <p className="text-lg">Making Ontario Better,<br />One Report at a Time.</p>
-        </div>
-      </div>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+      <div className="bg-white rounded-2xl shadow-lg w-full max-w-md p-8">
+        <h2 className="text-3xl font-bold text-center text-blue-700 mb-2">Create Account</h2>
+        <p className="text-sm text-center text-gray-500 mb-6">Sign up to access the platform</p>
 
-      {/* Right signup form */}
-      <div className="w-1/2 flex items-center justify-center p-10 bg-white">
-        <form onSubmit={handleSubmit} className="w-full max-w-sm">
-          <h2 className="text-2xl font-semibold mb-6 text-center">Create your account</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            value={form.name}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-600"
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={form.email}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-600"
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-600"
+            required
+          />
+          <input
+            type="password"
+            name="confirm"
+            placeholder="Confirm Password"
+            value={form.confirm}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-600"
+            required
+          />
 
-          <label className="block mb-4">
-            <span className="text-sm font-medium text-gray-700">Full Name</span>
-            <input
-              type="text"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              className="mt-1 block w-full border-b border-gray-400 focus:outline-none focus:border-black bg-transparent py-1"
-              required
-            />
-          </label>
-
-          <label className="block mb-4">
-            <span className="text-sm font-medium text-gray-700">E-Mail Address</span>
-            <input
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              className="mt-1 block w-full border-b border-gray-400 focus:outline-none focus:border-black bg-transparent py-1"
-              required
-            />
-          </label>
-
-          <label className="block mb-4">
-            <span className="text-sm font-medium text-gray-700">Password</span>
-            <input
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              className="mt-1 block w-full border-b border-gray-400 focus:outline-none focus:border-black bg-transparent py-1"
-              required
-            />
-          </label>
-
-          <label className="block mb-6">
-            <span className="text-sm font-medium text-gray-700">Confirm Password</span>
-            <input
-              type="password"
-              name="confirm"
-              value={form.confirm}
-              onChange={handleChange}
-              className="mt-1 block w-full border-b border-gray-400 focus:outline-none focus:border-black bg-transparent py-1"
-              required
-            />
-          </label>
-
-          {error && <p className="text-red-600 text-sm mb-4">{error}</p>}
+          {error && <p className="text-red-500 text-sm">{error}</p>}
 
           <button
             type="submit"
-            className="w-full bg-black text-white py-2 rounded-full font-medium hover:bg-gray-800 transition"
+            className="w-full bg-blue-700 hover:bg-blue-800 text-white py-2 rounded-md transition"
           >
             Sign Up
           </button>
         </form>
+
+        <div className="mt-4 text-center text-sm text-blue-600">
+          <button onClick={() => router.push("/login")} className="hover:underline">
+            Already have an account?
+          </button>
+        </div>
       </div>
     </div>
   );

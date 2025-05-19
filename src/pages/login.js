@@ -19,17 +19,14 @@ export default function Login() {
       });
 
       const data = await res.json();
-
       if (!res.ok) {
         setError(data.error || "Login failed");
         return;
       }
 
-      // ✅ Store token & user info
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      // ✅ Redirect based on role
       const role = data.user.role;
       if (role === "admin") {
         router.push("/admin-dashboard");
@@ -38,74 +35,51 @@ export default function Login() {
       } else {
         router.push("/resident-dashboard");
       }
-    } catch (err) {
-      console.error(err);
+    } catch {
       setError("An unexpected error occurred");
     }
   };
 
   return (
-    <div className="flex min-h-screen">
-      {/* Left Branding */}
-      <div className="w-1/2 bg-black text-white flex items-center justify-center p-10">
-        <div>
-          <h1 className="text-3xl font-bold mb-4">Community Service App</h1>
-          <p className="text-lg">Making Ontario Better,<br />One Report at a Time.</p>
-        </div>
-      </div>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+      <div className="bg-white rounded-2xl shadow-lg w-full max-w-md p-8">
+        <h2 className="text-3xl font-bold text-center text-blue-700 mb-2">Welcome Back!</h2>
+        <p className="text-sm text-center text-gray-500 mb-6">Please login to your account</p>
 
-      {/* Right Form */}
-      <div className="w-1/2 flex items-center justify-center p-10 bg-white">
-        <form
-          onSubmit={handleLogin}
-          className="w-full max-w-sm"
-        >
-          <h2 className="text-2xl font-semibold mb-6 text-center">Get started</h2>
+        <form onSubmit={handleLogin} className="space-y-4">
+          <input
+            type="email"
+            placeholder="Email"
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-600"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-600"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
-          <label className="block mb-4">
-            <span className="text-sm font-medium text-gray-700">E-Mail Address</span>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full border-b border-gray-400 focus:outline-none focus:border-black bg-transparent py-1"
-              required
-            />
-          </label>
+          {error && <p className="text-red-500 text-sm">{error}</p>}
 
-          <label className="block mb-6">
-            <span className="text-sm font-medium text-gray-700">Password</span>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full border-b border-gray-400 focus:outline-none focus:border-black bg-transparent py-1"
-              required
-            />
-          </label>
-
-          {error && <p className="text-red-600 text-sm mb-4">{error}</p>}
-
-          <div className="flex gap-2 mb-4">
-            <button
-              type="button"
-              className="bg-black text-white px-4 py-2 rounded-full font-medium hover:bg-gray-800"
-              onClick={() => router.push("/register")}
-            >
-              Sign Up
-            </button>
-            <button
-              type="submit"
-              className="border border-black text-black px-4 py-2 rounded-full font-medium hover:bg-black hover:text-white transition"
-            >
-              Log In
-            </button>
-          </div>
-
-          <p className="text-sm text-blue-700 text-center hover:underline cursor-pointer">
-            Forgot Password?
-          </p>
+          <button
+            type="submit"
+            className="w-full bg-blue-700 hover:bg-blue-800 text-white py-2 rounded-md transition"
+          >
+            Login
+          </button>
         </form>
+
+        <div className="mt-4 flex justify-between text-sm text-blue-600">
+          <button onClick={() => router.push("/register")} className="hover:underline">
+            Create Account
+          </button>
+          <button className="hover:underline">Forgot Password?</button>
+        </div>
       </div>
     </div>
   );
