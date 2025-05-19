@@ -146,7 +146,7 @@ export default function HomePage() {
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 justify-items-center">
           {[
-            { name: "Vrundaben Patel", gender: "female" },
+            { name: "Vrunda Patel", gender: "female" },
             { name: "Sanskar Pardesi", gender: "male" },
             { name: "Nadi Lin", gender: "female" },
             { name: "Abhi Chakrani", gender: "male" },
