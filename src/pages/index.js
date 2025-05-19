@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function HomePage() {
   const router = useRouter();
@@ -18,7 +19,7 @@ export default function HomePage() {
       setSlideIndex((prev) => (prev + 1) % slides.length);
     }, 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [slides.length]);
 
   return (
     <div className="min-h-screen bg-black text-[#fdfaf5] font-sans transition-all duration-500">
@@ -77,25 +78,25 @@ export default function HomePage() {
           />
         </div>
       </div>
-      {/* About Us Section */}
-<section className="mt-20 px-10 py-12 bg-[#111] text-[#fdfaf5] text-center">
-  <h3 className="text-3xl font-bold text-orange-500 mb-6 tracking-wide">About Us</h3>
-  <div className="max-w-4xl mx-auto text-gray-300 leading-relaxed space-y-4 text-md sm:text-lg">
-    <p>
-      The Community Service App is a modern digital platform designed to bridge the communication gap between Ontario residents and local municipal services.
-      It enables residents to report public issues such as potholes, broken streetlights, garbage overflow, and illegal dumping with just a few taps.
-    </p>
-    <p>
-      With multilingual support and a secure role-based access system, the app empowers residents, clerks, and administrators to collaborate efficiently.
-      Each report is tracked in real-time, providing status updates and promoting accountability and transparency at every level.
-    </p>
-    <p>
-      Built by a passionate team of developers, our goal is to simplify civic engagement and ensure local problems are addressed faster and more effectively.
-      Whether you are reporting an issue or managing municipal responses, the Community Service App is your gateway to a cleaner, safer, and more responsive Ontario.
-    </p>
-  </div>
-</section>
 
+      {/* About Us Section */}
+      <section className="mt-20 px-10 py-12 bg-[#111] text-[#fdfaf5] text-center">
+        <h3 className="text-3xl font-bold text-orange-500 mb-6 tracking-wide">About Us</h3>
+        <div className="max-w-4xl mx-auto text-gray-300 leading-relaxed space-y-4 text-md sm:text-lg">
+          <p>
+            The Community Service App is a modern digital platform designed to bridge the communication gap between Ontario residents and local municipal services.
+            It enables residents to report public issues such as potholes, broken streetlights, garbage overflow, and illegal dumping with just a few taps.
+          </p>
+          <p>
+            With multilingual support and a secure role-based access system, the app empowers residents, clerks, and administrators to collaborate efficiently.
+            Each report is tracked in real-time, providing status updates and promoting accountability and transparency at every level.
+          </p>
+          <p>
+            Built by a passionate team of developers, our goal is to simplify civic engagement and ensure local problems are addressed faster and more effectively.
+            Whether you are reporting an issue or managing municipal responses, the Community Service App is your gateway to a cleaner, safer, and more responsive Ontario.
+          </p>
+        </div>
+      </section>
 
       {/* How it Works */}
       <section className="mt-20 px-6 sm:px-10 text-center">
@@ -106,19 +107,13 @@ export default function HomePage() {
           <div className="transition-transform duration-300 hover:scale-105 bg-[#1a1a1a] p-6 rounded-xl shadow-md">
             <h4 className="text-lg font-bold mb-2 text-white">
               1.{" "}
-              <a
-                href="/register"
-                className="text-orange-400 underline hover:text-orange-300"
-              >
+              <Link href="/register" className="text-orange-400 underline hover:text-orange-300">
                 Register
-              </a>{" "}
+              </Link>{" "}
               or{" "}
-              <a
-                href="/login"
-                className="text-orange-400 underline hover:text-orange-300"
-              >
+              <Link href="/login" className="text-orange-400 underline hover:text-orange-300">
                 Login
-              </a>
+              </Link>
             </h4>
             <p className="text-gray-300">
               Create your account to access the complaint reporting system.
@@ -139,7 +134,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Team Section (already optimized earlier) */}
+      {/* Team Section */}
       <section className="mt-20 px-6 sm:px-10 py-12 bg-[#111] text-white">
         <h3 className="text-3xl font-bold text-center text-orange-500 mb-10 tracking-wide">
           Meet the Team
