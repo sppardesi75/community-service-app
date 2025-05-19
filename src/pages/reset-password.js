@@ -1,6 +1,5 @@
-// /src/pages/reset-password.js
-import { useRouter } from "next/router";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 export default function ResetPassword() {
   const router = useRouter();
@@ -13,47 +12,69 @@ export default function ResetPassword() {
 
   const handleReset = async (e) => {
     e.preventDefault();
-    if (password !== confirm) return setError("Passwords do not match");
+    setMessage("");
+    setError("");
 
-    const res = await fetch("/api/reset-password", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token, password }),
-    });
+    if (!password || password.length < 6) {
+      return setError("Password must be at least 6 characters");
+    }
 
-    const data = await res.json();
-    if (!res.ok) return setError(data.error);
+    if (password !== confirm) {
+      return setError("Passwords do not match");
+    }
 
-    setMessage("Password reset successful. You can now log in.");
+    try {
+      const res = await fetch("/api/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, password }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "Reset failed");
+        return;
+      }
+
+      setMessage("Password reset successful! Redirecting to login...");
+      setTimeout(() => router.push("/login"), 2000);
+    } catch (err) {
+      setError("Unexpected error");
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <form onSubmit={handleReset} className="w-full max-w-md bg-white p-6 rounded shadow">
-        <h2 className="text-xl font-bold mb-4">Reset Password</h2>
+    <div className="min-h-screen flex justify-center items-center bg-gray-100">
+      <form onSubmit={handleReset} className="bg-white p-8 rounded shadow-md w-full max-w-sm">
+        <h2 className="text-2xl font-bold mb-4 text-center">Reset Password</h2>
 
         <input
           type="password"
           placeholder="New Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          className="w-full border px-3 py-2 mb-4"
           required
-          className="w-full border p-2 mb-4"
         />
 
         <input
           type="password"
-          placeholder="Confirm Password"
+          placeholder="Confirm New Password"
           value={confirm}
           onChange={(e) => setConfirm(e.target.value)}
+          className="w-full border px-3 py-2 mb-4"
           required
-          className="w-full border p-2 mb-4"
         />
 
-        {message && <p className="text-green-600">{message}</p>}
-        {error && <p className="text-red-600">{error}</p>}
+        {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
+        {message && <p className="text-green-600 text-sm mb-3">{message}</p>}
 
-        <button className="w-full bg-black text-white py-2">Reset Password</button>
+        <button
+          type="submit"
+          className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded"
+        >
+          Reset Password
+        </button>
       </form>
     </div>
   );
