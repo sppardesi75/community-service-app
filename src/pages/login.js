@@ -95,9 +95,12 @@ export default function Login() {
             </button>
           </div>
 
-          <p className="text-sm text-orange-500 text-center hover:underline cursor-pointer">
-            Forgot Password?
-          </p>
+<p
+  onClick={() => router.push("/forgot-password")}
+  className="text-sm text-orange-500 text-center hover:underline cursor-pointer"
+>
+  Forgot Password?
+</p>
         </form>
       </div>
     </div>
