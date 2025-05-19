@@ -1,4 +1,3 @@
-// /src/pages/forgot-password.js
 import { useState } from "react";
 
 export default function ForgotPassword() {
@@ -24,24 +23,40 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <form onSubmit={handleSubmit} className="w-full max-w-md p-6 bg-white rounded shadow">
-        <h2 className="text-xl font-bold mb-4">Forgot Password</h2>
+    <div className="flex min-h-screen font-sans">
+      {/* Left Panel */}
+      <div className="w-1/2 bg-black text-white flex flex-col justify-center items-start pl-20">
+        <h1 className="text-5xl font-extrabold text-orange-500 leading-tight">
+          Forgot<br />Your<br />Password?
+        </h1>
+        <p className="mt-6 text-lg text-gray-300">Don't worry! We'll help you get back in.</p>
+      </div>
 
-        <input
-          type="email"
-          placeholder="Enter your email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="w-full border p-2 mb-4"
-        />
+      {/* Right Panel */}
+      <div className="w-1/2 bg-[#fdfaf5] flex items-center justify-center">
+        <form onSubmit={handleSubmit} className="w-full max-w-sm px-4">
+          <h2 className="text-2xl font-semibold text-black mb-10 text-center">Reset your password</h2>
 
-        {message && <p className="text-green-600">{message}</p>}
-        {error && <p className="text-red-600">{error}</p>}
+          <input
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="w-full mb-6 bg-transparent border-b border-gray-400 focus:outline-none focus:border-black py-2 placeholder:text-gray-600"
+          />
 
-        <button className="w-full bg-black text-white py-2">Send Reset Link</button>
-      </form>
+          {message && <p className="text-green-600 text-sm mb-4">{message}</p>}
+          {error && <p className="text-red-600 text-sm mb-4">{error}</p>}
+
+          <button
+            type="submit"
+            className="bg-orange-500 hover:bg-orange-600 text-white w-full py-2 rounded-full font-semibold shadow-md transition"
+          >
+            Send Reset Link
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
