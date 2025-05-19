@@ -41,45 +41,64 @@ export default function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-      <div className="bg-white rounded-2xl shadow-lg w-full max-w-md p-8">
-        <h2 className="text-3xl font-bold text-center text-blue-700 mb-2">Welcome Back!</h2>
-        <p className="text-sm text-center text-gray-500 mb-6">Please login to your account</p>
+    <div className="flex min-h-screen font-sans">
+      {/* Left Panel */}
+      <div className="w-1/2 bg-black text-white flex flex-col justify-center items-start pl-20">
+        <h1 className="text-5xl font-extrabold text-orange-500 leading-tight">
+          Community<br />Service<br />App
+        </h1>
+        <p className="mt-6 text-lg text-gray-300">Making Ontario Better,<br />One Report at a Time.</p>
+      </div>
 
-        <form onSubmit={handleLogin} className="space-y-4">
-          <input
-            type="email"
-            placeholder="Email"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-600"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-600"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+      {/* Right Panel */}
+      <div className="w-1/2 bg-[#fdfaf5] flex items-center justify-center">
+        <form onSubmit={handleLogin} className="w-full max-w-sm px-4">
+          <h2 className="text-2xl font-semibold text-black mb-10 text-center">Get started</h2>
 
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+          <div className="mb-6">
+            <input
+              type="email"
+              placeholder="E-Mail Address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full bg-transparent border-b border-gray-400 focus:outline-none focus:border-black py-2 placeholder:text-gray-600"
+              required
+            />
+          </div>
 
-          <button
-            type="submit"
-            className="w-full bg-blue-700 hover:bg-blue-800 text-white py-2 rounded-md transition"
-          >
-            Login
-          </button>
+          <div className="mb-8">
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full bg-transparent border-b border-gray-400 focus:outline-none focus:border-black py-2 placeholder:text-gray-600"
+              required
+            />
+          </div>
+
+          {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+
+          <div className="flex items-center gap-3 mb-6">
+            <button
+              type="button"
+              onClick={() => router.push("/register")}
+              className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-full font-semibold shadow-md transition"
+            >
+              Sign Up
+            </button>
+            <button
+              type="submit"
+              className="border border-black text-black px-6 py-2 rounded-full font-semibold hover:bg-black hover:text-white transition"
+            >
+              Log In
+            </button>
+          </div>
+
+          <p className="text-sm text-orange-500 text-center hover:underline cursor-pointer">
+            Forgot Password?
+          </p>
         </form>
-
-        <div className="mt-4 flex justify-between text-sm text-blue-600">
-          <button onClick={() => router.push("/register")} className="hover:underline">
-            Create Account
-          </button>
-          <button className="hover:underline">Forgot Password?</button>
-        </div>
       </div>
     </div>
   );

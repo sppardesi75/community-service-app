@@ -48,64 +48,77 @@ export default function Register() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-      <div className="bg-white rounded-2xl shadow-lg w-full max-w-md p-8">
-        <h2 className="text-3xl font-bold text-center text-blue-700 mb-2">Create Account</h2>
-        <p className="text-sm text-center text-gray-500 mb-6">Sign up to access the platform</p>
+    <div className="flex min-h-screen font-sans">
+      {/* Left Panel */}
+      <div className="w-1/2 bg-black text-white flex flex-col justify-center items-start pl-20">
+        <h1 className="text-5xl font-extrabold text-orange-500 leading-tight">
+          Community<br />Service<br />App
+        </h1>
+        <p className="mt-6 text-lg text-gray-300">Making Ontario Better,<br />One Report at a Time.</p>
+      </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            value={form.name}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-600"
-            required
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={form.email}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-600"
-            required
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={form.password}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-600"
-            required
-          />
-          <input
-            type="password"
-            name="confirm"
-            placeholder="Confirm Password"
-            value={form.confirm}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-600"
-            required
-          />
+      {/* Right Panel */}
+      <div className="w-1/2 bg-[#fdfaf5] flex items-center justify-center">
+        <form onSubmit={handleSubmit} className="w-full max-w-sm px-4">
+          <h2 className="text-2xl font-semibold text-black mb-10 text-center">Create your account</h2>
 
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+          <div className="mb-6">
+            <input
+              type="text"
+              name="name"
+              placeholder="Full Name"
+              value={form.name}
+              onChange={handleChange}
+              className="w-full bg-transparent border-b border-gray-400 focus:outline-none focus:border-black py-2 placeholder:text-gray-600"
+              required
+            />
+          </div>
+
+          <div className="mb-6">
+            <input
+              type="email"
+              name="email"
+              placeholder="E-Mail Address"
+              value={form.email}
+              onChange={handleChange}
+              className="w-full bg-transparent border-b border-gray-400 focus:outline-none focus:border-black py-2 placeholder:text-gray-600"
+              required
+            />
+          </div>
+
+          <div className="mb-6">
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={form.password}
+              onChange={handleChange}
+              className="w-full bg-transparent border-b border-gray-400 focus:outline-none focus:border-black py-2 placeholder:text-gray-600"
+              required
+            />
+          </div>
+
+          <div className="mb-8">
+            <input
+              type="password"
+              name="confirm"
+              placeholder="Confirm Password"
+              value={form.confirm}
+              onChange={handleChange}
+              className="w-full bg-transparent border-b border-gray-400 focus:outline-none focus:border-black py-2 placeholder:text-gray-600"
+              required
+            />
+          </div>
+
+          {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
           <button
             type="submit"
-            className="w-full bg-blue-700 hover:bg-blue-800 text-white py-2 rounded-md transition"
+            className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-full font-semibold transition"
           >
             Sign Up
           </button>
         </form>
-
-        <div className="mt-4 text-center text-sm text-blue-600">
-          <button onClick={() => router.push("/login")} className="hover:underline">
-            Already have an account?
-          </button>
-        </div>
       </div>
     </div>
   );
