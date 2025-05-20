@@ -78,9 +78,13 @@ export default function Register() {
     <div className="flex min-h-screen font-sans">
       {/* Left Panel */}
       <div className="w-1/2 bg-black text-white flex flex-col justify-center items-start pl-20">
-        <h1 className="text-5xl font-extrabold text-orange-500 leading-tight">
-          Community<br />Service<br />App
-        </h1>
+<h1
+  onClick={() => router.push("/")}
+  className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-orange-500 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-orange-400 hover:via-yellow-300 hover:to-orange-500 leading-tight tracking-tight cursor-pointer transition-all duration-300 text-center sm:text-left"
+>
+  Community<br className="hidden sm:block" />Service<br className="hidden sm:block" />App
+</h1>
+
         <p className="mt-6 text-lg text-gray-300">Making Ontario Better,<br />One Report at a Time.</p>
       </div>
 
@@ -156,14 +160,27 @@ export default function Register() {
             />
           </div>
 
-          {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
-          <button
-            type="submit"
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-full font-semibold transition"
-          >
-            Sign Up
-          </button>
+<button
+  type="submit"
+  className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-full font-semibold transition"
+>
+  Sign Up
+</button>
+
+{/* Creative Login Link */}
+<p className="mt-6 text-center text-sm text-gray-600">
+  Already part of the movement?{" "}
+  <span
+    onClick={() => router.push("/login")}
+    className="text-orange-500 font-semibold cursor-pointer hover:underline"
+  >
+    Log in here
+  </span>{" "}
+  and keep making Ontario better!
+</p>
+          
         </form>
       </div>
     </div>

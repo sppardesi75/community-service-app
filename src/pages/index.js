@@ -46,9 +46,10 @@ export default function HomePage() {
 
       {/* Intro Section */}
       <section className="text-center px-6 sm:px-10 mt-12 max-w-4xl mx-auto">
-        <h1 className="text-4xl sm:text-5xl font-extrabold text-orange-500 mb-2 leading-snug">
-          Community Service App
-        </h1>
+<h1 className="text-4xl sm:text-5xl font-extrabold text-orange-500 mb-2 leading-snug tracking-snug cursor-pointer transition-all duration-300 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-orange-400 hover:via-yellow-300 hover:to-orange-500">
+  Community Service App
+</h1>
+
         <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-[#fdfaf5]">
           Making Ontario Better, One Report at a Time
         </h2>
