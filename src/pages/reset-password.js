@@ -52,7 +52,7 @@ export default function ResetPassword() {
       setMessage("Password reset successful! Redirecting to login...");
       setTimeout(() => router.push("/login"), 2000);
     } catch (err) {
-      setError("Unexpected error");
+      setError("Unexpected error!");
     }
   };
 
