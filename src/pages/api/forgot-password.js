@@ -17,7 +17,7 @@ export default async function handler(req, res) {
 
   const token = crypto.randomBytes(32).toString("hex");
   user.resetToken = token;
-  user.resetTokenExpiry = Date.now() + 3600000; // 1 hour
+  user.resetTokenExpiry = Date.now() + 900000; // 15 min
   await user.save();
 
   await sendResetEmail(email, token);
