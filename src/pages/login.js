@@ -56,7 +56,7 @@ export default function Login() {
       {/* Right Panel */}
       <div className="w-1/2 bg-[#fdfaf5] flex items-center justify-center">
         <form onSubmit={handleLogin} className="w-full max-w-sm px-4">
-          <h2 className="text-2xl font-semibold text-black mb-10 text-center">Get started</h2>
+          <h2 className="text-2xl font-semibold text-black mb-10 text-center">Get started!</h2>
 
           <div className="mb-6">
             <input

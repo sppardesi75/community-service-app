@@ -121,7 +121,7 @@ export default function HomePage() {
             </p>
           </div>
           <div className="transition-transform duration-300 hover:scale-105 bg-[#1a1a1a] p-6 rounded-xl shadow-md">
-            <h4 className="text-lg font-bold mb-2 text-white">2. Report an Issue</h4>
+            <h4 className="text-lg font-bold mb-2 text-white">2. Report an Issue.</h4>
             <p className="text-gray-300">
               Submit complaints with location, photo, and description.
             </p>

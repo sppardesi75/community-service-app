@@ -70,7 +70,7 @@ export default function Register() {
 
       router.push("/login");
     } catch {
-      setError("An unexpected error occurred");
+      setError("An unexpected error occurred!");
     }
   };
 

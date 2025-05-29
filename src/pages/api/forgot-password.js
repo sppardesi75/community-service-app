@@ -22,5 +22,5 @@ export default async function handler(req, res) {
 
   await sendResetEmail(email, token);
 
-  res.status(200).json({ message: "Reset email sent" });
+  res.status(200).json({ message: "Reset email sent!" });
 }
