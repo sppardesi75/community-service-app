@@ -140,10 +140,11 @@ export default function HomePage() {
         <h3 className="text-3xl font-bold text-center text-orange-500 mb-10 tracking-wide">
           Meet the Team
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 justify-items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-6 justify-items-center">
           {[
-            { name: "Vrunda Patel", gender: "female" },
             { name: "Sanskar Pardesi", gender: "male" },
+            { name: "Vrunda Patel", gender: "female" },
+            { name: "Yash Patel", gender: "male" },
             { name: "Nadi Lin", gender: "female" },
             { name: "Abhi Chakrani", gender: "male" },
           ].map((member, idx) => (

@@ -33,7 +33,7 @@ export default function Login() {
       } else if (role === "clerk") {
         router.push("/clerk-dashboard");
       } else {
-        router.push("/resident-dashboard");
+        router.push("/resident/dashboard");
       }
     } catch {
       setError("An unexpected error occurred");
