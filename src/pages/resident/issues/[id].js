@@ -11,7 +11,7 @@ export default function IssueDetailsPage() {
   const [feedback, setFeedback] = useState(0);
   const [message, setMessage] = useState("");
   const [feedbackText, setFeedbackText] = useState("");
-
+//
   useEffect(() => {
     if (!id) return;
     const fetchIssue = async () => {

@@ -51,7 +51,7 @@ export default function HomePage() {
 </h1>
 
         <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-[#fdfaf5]">
-          Making Ontario Better, One Report at a Time
+          Making Ontario Better, One Report at a Time.
         </h2>
         <p className="text-md sm:text-lg text-gray-300 leading-relaxed">
           Our app empowers Ontario residents to report and track public issues like potholes,

@@ -10,7 +10,7 @@ export default function ResidentDashboard() {
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
 
-  // ✅ Fetch issues from backend
+  //  Fetch issues from backend
   useEffect(() => {
     const fetchIssues = async () => {
       try {

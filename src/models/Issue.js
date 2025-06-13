@@ -27,7 +27,7 @@ const issueSchema = new mongoose.Schema(
       },
     ],
 
-    // ✅ New: Feedback array
+
     feedbacks: [
       {
         rating: { type: Number, required: true, min: 1, max: 5 },

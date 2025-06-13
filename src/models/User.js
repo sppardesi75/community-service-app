@@ -15,7 +15,7 @@ address: {
       default: "English",
     },
 
-    // 🔒 Password reset
+    //  Password reset
     resetToken: String,
     resetTokenExpiry: Date,
   },

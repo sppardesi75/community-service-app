@@ -17,7 +17,7 @@ export default function ClerkDashboard() {
         const data = await res.json();
         setIssues(data.issues || []);
       } catch (err) {
-        console.error("Failed to fetch clerk issues:", err);
+        console.error("Failed to fetch clerk issues!:", err);
       }
     };
     fetchIssues();
