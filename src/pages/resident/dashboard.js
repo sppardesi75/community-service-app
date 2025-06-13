@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { FiArrowRight } from "react-icons/fi";
+import { useRouter } from "next/router";
 
 export default function ResidentDashboard() {
+  const router = useRouter();
   const [issues, setIssues] = useState([]);
   const [formData, setFormData] = useState({ title: "", category: "", description: "", location: "" });
   const [images, setImages] = useState([]);
@@ -32,17 +34,19 @@ export default function ResidentDashboard() {
   }, {});
 
   const renderCard = (status, color) => (
-    <div key={status} className="mb-4">
-      <p className="text-sm font-medium mb-2 px-2" style={{ backgroundColor: color, borderRadius: 6 }}>
+    <div key={status} className="mb-5">
+      <p className="text-lg font-medium mb-3 px-3 py-1" style={{ backgroundColor: color, borderRadius: 8 }}>
         {status}
       </p>
       {(groupedIssues[status] || []).map((issue) => (
         <div
-          key={issue._id}
-          className="bg-white rounded-xl p-4 mb-2 shadow-md flex justify-between items-center"
-        >
+  key={issue._id}
+  onClick={() => router.push(`/resident/issues/${issue._id}`)}
+  className="cursor-pointer bg-white rounded-xl p-6 mb-2 shadow-md flex justify-between items-center hover:shadow-lg transition"
+>
+
           <div>
-            <h4 className="font-bold text-black">{issue.title}</h4>
+            <h1 className="font-bold text-black">{issue.title}</h1>
             <p className="text-sm text-gray-600">
               Filed on: {new Date(issue.createdAt).toLocaleDateString()}
             </p>
@@ -113,7 +117,7 @@ export default function ResidentDashboard() {
       {/* Left Panel – Dashboard */}
       <div className="w-1/2 bg-[#fdfaf5] p-8">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-3xl font-bold text-orange-500">User Dashboard</h2>
+          <h2 className="text-4xl font-bold text-orange-500">User Dashboard</h2>
           <div className="flex items-center gap-4 text-black">
             <span className="text-2xl">🔔</span>
             <span className="text-2xl">⚙️</span>
@@ -128,7 +132,7 @@ export default function ResidentDashboard() {
 
       {/* Right Panel – Complaint Form */}
       <div className="w-1/2 bg-black text-white p-10 flex flex-col justify-center">
-        <h2 className="text-xl sm:text-2xl font-semibold text-orange-500 mb-6">
+        <h2 className="text-xl sm:text-4xl font-semibold text-orange-500 mb-6 justify-center">
           Create a new complaint
         </h2>
 
@@ -146,7 +150,7 @@ export default function ResidentDashboard() {
             name="category"
             value={formData.category}
             onChange={handleChange}
-            className="w-full bg-black border-b border-gray-400 focus:outline-none focus:border-white py-2 text-white"
+            className="w-full bg-black border-b border-gray-400 focus:outline-none focus:border-white py-2 text-gray-300"
             required
           >
             <option value="" disabled hidden className="text-gray-400">

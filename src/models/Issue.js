@@ -19,6 +19,23 @@ const issueSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+
+    // ✅ New: Track update history (displayed on right-side panel)
+    updates: [
+      {
+        type: String, // Example: "Update 01: The issue is submitted..."
+      },
+    ],
+
+    // ✅ New: Feedback array
+    feedbacks: [
+      {
+        rating: { type: Number, required: true, min: 1, max: 5 },
+    comment: String,
+    anonymous: { type: Boolean, default: true },
+    submissionDate: { type: Date, default: Date.now },
+      },
+    ],
   },
   { timestamps: true }
 );
