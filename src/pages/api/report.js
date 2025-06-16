@@ -26,8 +26,11 @@ export default async function handler(req, res) {
   form.parse(req, async (err, fields, files) => {
     if (err) {
       console.error("Form parse error:", err);
-      return res.status(500).json({ message: "Form parsing failed" });
+      return res.status(500).json({ message: "Form parsing failed", error: err.message });
     }
+
+    // Debug log
+    console.log("Received files:", files);
 
     try {
       const decoded = verifyToken(req);
@@ -44,16 +47,40 @@ export default async function handler(req, res) {
       // ✅ Move uploaded files to /public/uploads
       const imagePaths = [];
       if (files.images) {
-        const fileArray = Array.isArray(files.images) ? files.images : [files.images];
-        for (const file of fileArray) {
-          const fileName = Date.now() + "-" + file.originalFilename;
-          const newPath = `./public/uploads/${fileName}`;
+        try {
+          const fileArray = Array.isArray(files.images) ? files.images : [files.images];
+          console.log("Processing files:", fileArray.length);
 
-          // In case of cross-device issue, use copy + unlink instead of rename
-          fs.copyFileSync(file.filepath, newPath);
-          fs.unlinkSync(file.filepath);
+          for (const file of fileArray) {
+            try {
+              const fileName = Date.now() + "-" + file.originalFilename;
+              const newPath = `./public/uploads/${fileName}`;
 
-          imagePaths.push(`/uploads/${fileName}`);
+              // Ensure uploads directory exists
+              if (!fs.existsSync('./public/uploads')) {
+                fs.mkdirSync('./public/uploads', { recursive: true });
+              }
+
+              // Debug log
+              console.log("Copying file:", {
+                from: file.filepath,
+                to: newPath,
+                size: file.size
+              });
+
+              // In case of cross-device issue, use copy + unlink instead of rename
+              fs.copyFileSync(file.filepath, newPath);
+              fs.unlinkSync(file.filepath);
+
+              imagePaths.push(`/uploads/${fileName}`);
+            } catch (fileErr) {
+              console.error("Error processing file:", fileErr);
+              throw new Error(`File processing failed: ${fileErr.message}`);
+            }
+          }
+        } catch (filesErr) {
+          console.error("Error processing files array:", filesErr);
+          throw new Error(`Files processing failed: ${filesErr.message}`);
         }
       }
 
