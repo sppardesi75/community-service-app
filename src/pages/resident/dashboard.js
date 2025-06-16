@@ -122,6 +122,8 @@ function ResidentDashboard() {
       body.append("latitude", latLng.lat);
       body.append("longitude", latLng.lng);
 
+      console.log("Submitting form with images:", images.length);
+      
       const res = await fetch("/api/report", {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
@@ -129,7 +131,9 @@ function ResidentDashboard() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Submission failed");
+      if (!res.ok) {
+        throw new Error(data.error || data.message || "Submission failed");
+      }
 
       setSuccess("Complaint submitted successfully!");
       handleClear();
