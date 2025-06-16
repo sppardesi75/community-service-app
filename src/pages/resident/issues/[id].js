@@ -1,8 +1,9 @@
-// pages/resident/issues/[id].js
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import withAuth from "@/utils/withAuth";
+import MapDisplay from "@/components/MapDisplay";
 
-export default function IssueDetailsPage() {
+function IssueDetailsPage() {
   const { query } = useRouter();
   const { id } = query;
 
@@ -11,7 +12,11 @@ export default function IssueDetailsPage() {
   const [feedback, setFeedback] = useState(0);
   const [message, setMessage] = useState("");
   const [feedbackText, setFeedbackText] = useState("");
-//
+  const [showSettings, setShowSettings] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const settingsRef = useRef(null);
+  const notificationsRef = useRef(null);
+
   useEffect(() => {
     if (!id) return;
     const fetchIssue = async () => {
@@ -31,6 +36,12 @@ export default function IssueDetailsPage() {
     fetchIssue();
   }, [id]);
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    window.location.href = "/login";
+  };
+
   const handleRating = async () => {
     const token = localStorage.getItem("token");
     const res = await fetch(`/api/issues/${id}/feedback`, {
@@ -45,21 +56,27 @@ export default function IssueDetailsPage() {
     setMessage(data.message);
   };
 
-const handleWithdraw = async () => {
-  const token = localStorage.getItem("token");
-  const res = await fetch(`/api/issues/${id}/withdraw`, {
-    method: "DELETE",
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  const data = await res.json();
-  setMessage(data.message);
+  const handleWithdraw = async () => {
+    const token = localStorage.getItem("token");
+    const res = await fetch(`/api/issues/${id}/withdraw`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await res.json();
+    setMessage(data.message);
+    setTimeout(() => {
+      window.location.href = "/resident/dashboard";
+    }, 2000);
+  };
 
-  // Redirect to dashboard after 2 seconds
-  setTimeout(() => {
-    window.location.href = "/resident/dashboard";
-  }, 2000);
-};
-
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!settingsRef.current?.contains(e.target)) setShowSettings(false);
+      if (!notificationsRef.current?.contains(e.target)) setShowNotifications(false);
+    };
+    window.addEventListener("mousedown", handleClickOutside);
+    return () => window.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   if (loading) return <p className="p-10">Loading...</p>;
   if (!issue) return <p className="p-10 text-red-500">Issue not found</p>;
@@ -68,24 +85,55 @@ const handleWithdraw = async () => {
     <div className="flex min-h-screen">
       {/* Left Side - Issue Details */}
       <div className="w-2/3 p-8 bg-[#fdfaf5]">
-        {/* Header with notification icons */}
-        <div className="flex justify-between items-start mb-6">
+        <div className="flex justify-between items-start mb-6 relative">
           <h1 className="text-4xl font-bold text-orange-500">Issue Details (User)</h1>
-          <div className="flex items-center gap-4 text-black">
-            <span className="text-2xl">🔔</span>
-            <span className="text-2xl">⚙️</span>
+          <div className="flex items-center gap-4 text-black relative">
+            {/* Notifications */}
+            <div ref={notificationsRef} className="relative">
+              <span
+                className="text-2xl cursor-pointer"
+                onClick={() => setShowNotifications((prev) => !prev)}
+              >
+                🔔
+              </span>
+              {showNotifications && (
+                <div className="absolute right-0 mt-2 w-56 bg-white text-black border rounded shadow-md z-20">
+                  <div className="p-4 text-sm text-gray-700">No new notifications</div>
+                </div>
+              )}
+            </div>
+
+            {/* Settings */}
+            <div ref={settingsRef} className="relative">
+              <span
+                className="text-2xl cursor-pointer"
+                onClick={() => setShowSettings((prev) => !prev)}
+              >
+                ⚙️
+              </span>
+              {showSettings && (
+                <div className="absolute right-0 mt-2 w-40 bg-white text-black border rounded shadow-md z-20">
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* Issue Title */}
+        {/* Title */}
         <h2 className="text-2xl font-bold text-black mb-4">{issue.title}</h2>
-        
+
         {/* Filed Date */}
         <p className="text-lg text-gray-600 mb-6">
           Filed On: {new Date(issue.createdAt).toLocaleDateString()}
         </p>
-        
-        {/* Category Dropdown */}
+
+        {/* Category */}
         <div className="mb-8">
           <div className="flex items-center justify-between bg-gray-100 p-4 rounded-lg border">
             <span className="text-lg text-gray-700">{issue.category}</span>
@@ -94,41 +142,23 @@ const handleWithdraw = async () => {
             </svg>
           </div>
         </div>
-        
+
         {/* Description */}
         <p className="text-lg text-gray-700 leading-relaxed mb-8">
           {issue.description}
         </p>
-        
+
         {/* Location Section */}
         <div className="mb-8">
           <h3 className="text-2xl font-semibold text-black mb-4">Location</h3>
-          <div className="rounded-2xl overflow-hidden border-2 border-gray-200">
-            <div className="h-64 bg-blue-900 relative">
-              <img 
-                src="/map-placeholder.png" 
-                alt="Map" 
-                className="w-full h-full object-cover"
-                style={{
-                  background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #60a5fa 100%)'
-                }}
-              />
-              <div className="absolute inset-0 bg-blue-800 opacity-80"></div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center text-white">
-                  <div className="text-sm font-medium mb-2">TRINITY-BELLWOODS</div>
-                  <div className="text-sm font-medium mb-2">PARKDALE</div>
-                  <div className="text-lg font-bold">HARBOURFRONT</div>
-                </div>
-              </div>
-            </div>
-            <div className="bg-blue-700 text-white text-center py-4">
-              <span className="text-2xl font-bold">Toronto</span>
-            </div>
-          </div>
+          <MapDisplay
+            lat={issue.latitude}
+            lng={issue.longitude}
+            interactive={false}
+          />
         </div>
-        
-        {/* Download Button */}
+
+        {/* Download Files */}
         {issue.images?.length > 0 && (
           <a
             href={issue.images[0]}
@@ -140,26 +170,29 @@ const handleWithdraw = async () => {
         )}
       </div>
 
-      {/* Right Side - Updates and Feedback */}
+      {/* Right Panel - Updates & Feedback */}
       <div className="w-1/3 bg-black text-white p-8">
-        {/* Updates Section */}
         <h2 className="text-4xl font-bold text-orange-400 mb-8">Updates</h2>
-        
+
         <div className="space-y-6 mb-12">
           {issue.updates?.slice(0).reverse().map((update, i) => (
             <div key={i} className="text-lg">
-              <p className="mb-3">• Update {String(issue.updates.length - i).padStart(2, '0')}: {update.text}</p>
-              <div className={`inline-block px-4 py-2 rounded-full text-black font-bold text-sm ${
-                update.status === "Pending Approval"
-                  ? "bg-blue-300"
-                  : update.status === "Under Review"
-                  ? "bg-yellow-300"
-                  : update.status === "Resolved"
-                  ? "bg-green-300"
-                  : update.status === "Rejected"
-                  ? "bg-red-300"
-                  : "bg-white"
-              }`}>
+              <p className="mb-3">
+                • Update {String(issue.updates.length - i).padStart(2, "0")}: {update.text}
+              </p>
+              <div
+                className={`inline-block px-4 py-2 rounded-full text-black font-bold text-sm ${
+                  update.status === "Pending Approval"
+                    ? "bg-blue-300"
+                    : update.status === "Under Review"
+                    ? "bg-yellow-300"
+                    : update.status === "Resolved"
+                    ? "bg-green-300"
+                    : update.status === "Rejected"
+                    ? "bg-red-300"
+                    : "bg-white"
+                }`}
+              >
                 • {update.status}
               </div>
             </div>
@@ -167,16 +200,14 @@ const handleWithdraw = async () => {
         </div>
 
         {/* Feedback Section */}
-        <div className="\ border-gray-600 pt-8">
-          {/* Feedback Textarea */}
+        <div className="border-gray-600 pt-8">
           <textarea
             placeholder="Feedback"
             className="w-full bg-transparent border-b border-white-400 focus:outline-none focus:border-white py-2 placeholder-gray-300"
             value={feedbackText}
             onChange={(e) => setFeedbackText(e.target.value)}
           />
-          
-          {/* Star Rating and Submit Button */}
+
           <div className="flex items-center justify-between mb-6">
             <div className="flex space-x-2">
               {[1, 2, 3, 4, 5].map((star) => (
@@ -187,13 +218,11 @@ const handleWithdraw = async () => {
                 >
                   <span
                     className={`${
-                      feedback >= star
-                        ? "text-yellow-400"
-                        : "text-transparent"
+                      feedback >= star ? "text-yellow-400" : "text-transparent"
                     }`}
                     style={{
                       WebkitTextStroke: feedback >= star ? "0" : "2px white",
-                      textStroke: feedback >= star ? "0" : "2px white"
+                      textStroke: feedback >= star ? "0" : "2px white",
                     }}
                   >
                     ★
@@ -209,7 +238,6 @@ const handleWithdraw = async () => {
             </button>
           </div>
 
-          {/* Withdraw Button */}
           <button
             onClick={handleWithdraw}
             className="w-full border-2 border-red-400 text-red-400 font-bold py-4 rounded-full hover:bg-red-400 hover:text-white text-lg transition-all duration-200 mb-6"
@@ -217,7 +245,6 @@ const handleWithdraw = async () => {
             Withdraw
           </button>
 
-          {/* Message Display */}
           {message && (
             <p className="text-green-400 text-lg font-medium">{message}</p>
           )}
@@ -226,3 +253,5 @@ const handleWithdraw = async () => {
     </div>
   );
 }
+
+export default withAuth(IssueDetailsPage, ["resident"]);

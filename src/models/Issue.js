@@ -6,36 +6,36 @@ const issueSchema = new mongoose.Schema(
     category: { type: String, required: true },
     description: { type: String, required: true },
     location: { type: String, required: true },
+    latitude: Number,
+    longitude: Number,
     images: [{ type: String }],
-
     status: {
       type: String,
       enum: ["Pending Approval", "Under Review", "Resolved", "Rejected"],
       default: "Pending Approval",
     },
-
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-
-    // ✅ New: Track update history (displayed on right-side panel)
-    updates: [
-      {
-        type: String, // Example: "Update 01: The issue is submitted..."
-      },
-    ],
-
+    assignedClerk: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    updates: {
+      type: Array,
+      default: []
+    },
 
     feedbacks: [
       {
         rating: { type: Number, required: true, min: 1, max: 5 },
-    comment: String,
-    anonymous: { type: Boolean, default: true },
-    submissionDate: { type: Date, default: Date.now },
-      },
-    ],
+        comment: String,
+        anonymous: { type: Boolean, default: true },
+        submissionDate: { type: Date, default: Date.now }
+      }
+    ]
   },
   { timestamps: true }
 );

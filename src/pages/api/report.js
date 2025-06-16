@@ -1,77 +1,82 @@
-// ✅ Use ESM import syntax instead of require
-import nextConnect from "next-connect";
-import multer from "multer";
-import path from "path";
+import formidable from "formidable";
 import fs from "fs";
-import jwt from "jsonwebtoken";
 import { connectToDatabase } from "@/lib/mongodb";
 import Issue from "@/models/Issue";
 import { verifyToken } from "@/middleware/auth";
 
-// Setup upload dir
-const uploadDir = path.join(process.cwd(), "/public/uploads");
-if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
-
-// Configure multer
-const storage = multer.diskStorage({
-  destination: uploadDir,
-  filename: (req, file, cb) => {
-    const uniqueName = `${Date.now()}-${file.originalname}`;
-    cb(null, uniqueName);
-  },
-});
-const upload = multer({ storage, limits: { files: 5 } });
-
-// Create handler
-const apiRoute = nextConnect({
-  onError(error, req, res) {
-    res.status(501).json({ error: `Something went wrong!: ${error.message}` });
-  },
-  onNoMatch(req, res) {
-    res.status(405).json({ error: `Method '${req.method}' Not Allowed` });
-  },
-});
-
-// Middleware
-apiRoute.use(upload.array("images", 5));
-
-apiRoute.post(async (req, res) => {
-  await connectToDatabase();
-
-  try {
-   let userId;
-try {
-  const decoded = verifyToken(req);
-  userId = decoded.id;
-} catch (error) {
-  return res.status(401).json({ message: error.message });
-}
-
-    const { title, category, description, location } = req.body;
-    const imagePaths = req.files?.map((file) => `/uploads/${file.filename}`) || [];
-
-    const issue = await Issue.create({
-      title,
-      category,
-      description,
-      location,
-      userId,
-      status: "Pending Approval", 
-      images: imagePaths,
-    });
-
-    return res.status(201).json({ message: "Issue submitted", issueId: issue._id });
-  } catch (err) {
-    console.error("Report submission error:", err);
-    return res.status(500).json({ message: "Something went wrong" });
-  }
-});
-
-// ✅ Export as default for ESM
 export const config = {
   api: {
-    bodyParser: false,
+    bodyParser: false, // Required for formidable
   },
 };
 
-export default apiRoute;
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ message: `Method ${req.method} Not Allowed` });
+  }
+
+  await connectToDatabase();
+
+  const form = formidable({
+    keepExtensions: true,
+    maxFileSize: 10 * 1024 * 1024, // 10MB per file
+    multiples: true,
+  });
+
+  form.parse(req, async (err, fields, files) => {
+    if (err) {
+      console.error("Form parse error:", err);
+      return res.status(500).json({ message: "Form parsing failed" });
+    }
+
+    try {
+      const decoded = verifyToken(req);
+      const userId = decoded.id;
+
+      // ✅ Extract fields as strings
+      const title = fields.title?.[0] || "";
+      const category = fields.category?.[0] || "";
+      const description = fields.description?.[0] || "";
+      const location = fields.location?.[0] || "";
+      const latitude = parseFloat(fields.latitude?.[0]);
+      const longitude = parseFloat(fields.longitude?.[0]);
+
+      // ✅ Move uploaded files to /public/uploads
+      const imagePaths = [];
+      if (files.images) {
+        const fileArray = Array.isArray(files.images) ? files.images : [files.images];
+        for (const file of fileArray) {
+          const fileName = Date.now() + "-" + file.originalFilename;
+          const newPath = `./public/uploads/${fileName}`;
+
+          // In case of cross-device issue, use copy + unlink instead of rename
+          fs.copyFileSync(file.filepath, newPath);
+          fs.unlinkSync(file.filepath);
+
+          imagePaths.push(`/uploads/${fileName}`);
+        }
+      }
+
+      // ✅ Save issue to DB
+      const issue = new Issue({
+        title,
+        category,
+        description,
+        location,
+        latitude,
+        longitude,
+        status: "Pending Approval",
+        userId,
+        images: imagePaths,
+        updates: ["Issue submitted and pending approval"]
+      });
+
+      await issue.save();
+
+      return res.status(201).json({ message: "Issue reported successfully", issue });
+    } catch (err) {
+      console.error("Error creating issue:", err);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+  });
+}

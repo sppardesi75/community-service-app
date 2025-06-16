@@ -1,26 +1,21 @@
-// /src/pages/api/issues/assigned.js
 import { connectToDatabase } from "@/lib/mongodb";
-import { verifyToken } from "@/middleware/auth";
 import Issue from "@/models/Issue";
-import User from "@/models/User";
+import { verifyToken } from "@/middleware/auth";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
-    return res.status(405).json({ message: "Method Not Allowed!" });
+    return res.status(405).json({ message: `Method ${req.method} not allowed` });
   }
 
   try {
     await connectToDatabase();
-
     const decoded = verifyToken(req);
-    const userId = decoded.id;
-    const role = decoded.role;
 
-    if (role !== "clerk") {
-      return res.status(403).json({ message: "Access denied. Clerk only." });
+    if (decoded.role !== "clerk") {
+      return res.status(403).json({ message: "Access denied" });
     }
 
-    const issues = await Issue.find({ assignedTo: userId }).sort({ createdAt: -1 });
+    const issues = await Issue.find({ assignedClerk: decoded.id }).sort({ createdAt: -1 });
 
     return res.status(200).json({ issues });
   } catch (err) {

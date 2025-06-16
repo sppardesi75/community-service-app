@@ -8,10 +8,12 @@ export default async function handler(req, res) {
   }
 
   try {
+
     await connectToDatabase();
 
     const decoded = verifyToken(req);
     const userId = decoded.id;
+    console.log("Authorization Header:", req.headers.authorization);
 
     const issues = await Issue.find({ userId }).sort({ createdAt: -1 });
     return res.status(200).json({ issues });
