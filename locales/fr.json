@@ -1,0 +1,24 @@
+{
+  "app_name": "Application de Service Communautaire",
+  "tagline": "Améliorer l’Ontario, un signalement à la fois.",
+  "description": "Notre application permet aux résidents de l’Ontario de signaler et de suivre des problèmes publics tels que les nids-de-poule, les dépôts illégaux et les lampadaires défectueux — rendant le gouvernement local plus transparent et réactif.",
+
+  "login": "Se connecter",
+  "register": "S'inscrire",
+  "about_us": "À propos de nous",
+  "about_text_1": "L'application de service communautaire est une plateforme numérique moderne conçue pour combler le fossé de communication entre les résidents de l’Ontario et les services municipaux. Elle permet aux résidents de signaler des problèmes publics comme des nids-de-poule, des lampadaires cassés, des débordements de déchets ou des dépôts illégaux, en quelques clics.",
+  "about_text_2": "Grâce à un support multilingue et à un système sécurisé basé sur les rôles, l'application permet aux résidents, commis et administrateurs de collaborer efficacement. Chaque signalement est suivi en temps réel, fournissant des mises à jour sur le statut et favorisant la transparence et la responsabilisation.",
+  "about_text_3": "Développée par une équipe passionnée, notre mission est de simplifier l'engagement civique et d'assurer que les problèmes locaux soient résolus rapidement et efficacement. Que vous signaliez un problème ou gériez les réponses municipales, l'application est votre passerelle vers un Ontario plus propre, plus sûr et plus réactif.",
+
+  "how_it_works": "Comment ça marche",
+  "step_1": "Inscription ou Connexion",
+  "step_1_desc": "Créez votre compte pour accéder au système de signalement.",
+  "step_2": "Signaler un problème",
+  "step_2_desc": "Soumettez des plaintes avec lieu, photo et description.",
+  "step_3": "Suivi et notifications",
+  "step_3_desc": "Recevez une notification lorsque le problème est reconnu et résolu.",
+
+  "team_title": "Rencontrez l'équipe",
+
+  "footer": "© 2025 Application de Service Communautaire – ReportEase. Tous droits réservés."
+}

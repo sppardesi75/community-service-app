@@ -1,0 +1,24 @@
+{
+  "app_name": "Community Service App",
+  "tagline": "Making Ontario Better, One Report at a Time.",
+  "description": "Our app empowers Ontario residents to report and track public issues like potholes, illegal dumping, and broken lights — making local government more transparent and responsive.",
+
+  "login": "Login",
+  "register": "Register",
+  "about_us": "About Us",
+  "about_text_1": "The Community Service App is a modern digital platform designed to bridge the communication gap between Ontario residents and local municipal services. It enables residents to report public issues such as potholes, broken streetlights, garbage overflow, and illegal dumping with just a few taps.",
+  "about_text_2": "With multilingual support and a secure role-based access system, the app empowers residents, clerks, and administrators to collaborate efficiently. Each report is tracked in real-time, providing status updates and promoting accountability and transparency at every level.",
+  "about_text_3": "Built by a passionate team of developers, our goal is to simplify civic engagement and ensure local problems are addressed faster and more effectively. Whether you are reporting an issue or managing municipal responses, the Community Service App is your gateway to a cleaner, safer, and more responsive Ontario.",
+
+  "how_it_works": "How It Works",
+  "step_1": "Register or Login",
+  "step_1_desc": "Create your account to access the complaint reporting system.",
+  "step_2": "Report an Issue",
+  "step_2_desc": "Submit complaints with location, photo, and description.",
+  "step_3": "Track & Get Updates",
+  "step_3_desc": "Get notified when the issue is acknowledged and resolved.",
+
+  "team_title": "Meet the Team",
+
+  "footer": "© 2025 Community Service App – ReportEase. All rights reserved."
+}

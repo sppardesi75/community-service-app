@@ -1,5 +1,3 @@
-// Updated ClerkDashboard to match the requested UI while keeping backend logic intact
-
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import withAuth from '@/utils/withAuth';
