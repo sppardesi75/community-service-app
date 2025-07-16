@@ -23,10 +23,18 @@ const issueSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    updates: {
-      type: Array,
-      default: []
+updates: [
+  {
+    text: { type: String, required: true },
+    status: {
+      type: String,
+      enum: ["Pending Approval", "Under Review", "Resolved", "Rejected"],
+      required: true
     },
+    timestamp: { type: Date, default: Date.now }
+  }
+],
+
 
     feedbacks: [
       {

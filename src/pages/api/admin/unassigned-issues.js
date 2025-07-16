@@ -93,8 +93,12 @@ export default async function handler(req, res) {
             issue.updates = [];
           }
 
-          // Add the new update as a string
-          issue.updates.push(trimmedUpdateText);
+          // ✅ FIXED: Push update as object with status and timestamp (same as issues/[id].js)
+          issue.updates.push({
+            text: trimmedUpdateText,
+            status: status,
+            timestamp: new Date()
+          });
 
           // Save changes
           await issue.save();

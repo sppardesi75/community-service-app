@@ -82,7 +82,7 @@ function IssueDetailsPage() {
   if (!issue) return <p className="p-10 text-red-500">Issue not found</p>;
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen overflow-hidden">
       {/* Left Side - Issue Details */}
       <div className="w-2/3 p-8 bg-[#fdfaf5]">
         <div className="flex justify-between items-start mb-6 relative">
@@ -183,13 +183,13 @@ function IssueDetailsPage() {
               <div
                 className={`inline-block px-4 py-2 rounded-full text-black font-bold text-sm ${
                   update.status === "Pending Approval"
-                    ? "bg-blue-300"
+                    ? "bg-blue-200 text-blue-900"
                     : update.status === "Under Review"
-                    ? "bg-yellow-300"
+                    ? "bg-yellow-100 text-yellow-900"
                     : update.status === "Resolved"
-                    ? "bg-green-300"
+                    ? "bg-green-100 text-green-900"
                     : update.status === "Rejected"
-                    ? "bg-red-300"
+                    ? "bg-red-100 text-red-900"
                     : "bg-white"
                 }`}
               >

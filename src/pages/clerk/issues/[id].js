@@ -37,7 +37,10 @@ function ClerkIssueDetailsPage() {
       const data = await res.json();
       if (res.ok) {
         setIssue(data.issue);
-        setNewStatus(data.issue.status);
+       setLoading(false);
+       setMessage("");
+  // Only set newStatus if it's the first fetch (status not set yet)
+       setNewStatus(prev => prev || data.issue.status);
       } else if ([401, 403].includes(res.status)) {
         router.push("/login");
       }
@@ -62,7 +65,7 @@ function ClerkIssueDetailsPage() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ status: newStatus, updateText }),
+        body: JSON.stringify({ status: newStatus, updateText:updateText.trim() }),
       });
 
       const data = await res.json();
@@ -168,20 +171,30 @@ function ClerkIssueDetailsPage() {
         </div>
 
         <div className="w-full border-b border-gray-700 mb-6"></div>
+<div className="w-full">
+  <div className="text-[#FF9100] text-xl font-bold mb-4">Updates</div>
+  <ul className="mb-6 space-y-4">
+    {issue.updates?.slice(0).reverse().map((update, i) => (
+      <li key={i} className="text-white text-base flex flex-col gap-1">
+        <span>
+          • <span className="font-semibold">Update {String(issue.updates.length - i).padStart(2, "0")}:</span> {update.text}
+        </span>
+        {update.status && (
+          <span className={`inline-block mt-1 px-3 py-1 rounded-md text-sm font-semibold ${STATUS_COLORS[update.status] || 'bg-gray-200 text-black'}`}>
+            • {update.status}
+          </span>
+        )}
+        {update.timestamp && (
+          <span className="text-gray-400 text-xs italic mt-1">
+            {new Date(update.timestamp).toLocaleString()}
+          </span>
+        )}
+      </li>
+    ))}
+  </ul>
+</div>
 
-        <div className="w-full">
-          <div className="text-[#FF9100] text-xl font-bold mb-4">Updates</div>
-          <ul className="mb-6 space-y-2">
-            {issue.updates?.slice(0).reverse().map((update, i) => (
-              <li key={i} className="text-white text-base flex flex-col gap-1">
-                <span>• <span className="font-semibold">Update {String(issue.updates.length - i).padStart(2, "0")}:</span> {update.text}</span>
-                {update.status && (
-                  <span className={`inline-block mt-1 px-3 py-1 rounded-md text-sm font-semibold ${STATUS_COLORS[update.status] || 'bg-gray-200 text-black'}`}>• {update.status}</span>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
+        
       </div>
     </div>
   );
