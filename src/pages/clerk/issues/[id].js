@@ -2,7 +2,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import withAuth from "@/utils/withAuth";
 import MapDisplay from "@/components/MapDisplay";
-
+import NotificationBell from "@/components/shared/NotificationBell";
+import SettingsMenu from "@/components/shared/SettingsMenu";
 const STATUS_COLORS = {
   'Pending Approval': 'bg-blue-200 text-blue-900',
   'Under Review': 'bg-yellow-100 text-yellow-900',
@@ -88,7 +89,13 @@ function ClerkIssueDetailsPage() {
   return (
     <div className="flex min-h-screen">
       <div className="w-2/3 p-8 pr-0 bg-[#f8f7f3]">
-        <h1 className="text-4xl font-bold text-orange-500 mb-6">Issue Details (Clerk)</h1>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-4xl font-bold text-orange-500">Issue Details (Clerk)</h1>
+          <div className="flex items-center gap-4 text-black">
+           <NotificationBell />
+           <SettingsMenu />
+          </div>
+        </div>
 
         <div className="mb-4">
           <div className="text-2xl font-bold mb-2">{issue.title}</div>

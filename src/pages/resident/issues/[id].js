@@ -2,7 +2,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState, useRef } from "react";
 import withAuth from "@/utils/withAuth";
 import MapDisplay from "@/components/MapDisplay";
-
+import NotificationBell from "@/components/shared/NotificationBell";
+import SettingsMenu from "@/components/shared/SettingsMenu";
 function IssueDetailsPage() {
   const { query } = useRouter();
   const { id } = query;
@@ -89,39 +90,10 @@ function IssueDetailsPage() {
           <h1 className="text-4xl font-bold text-orange-500">Issue Details (User)</h1>
           <div className="flex items-center gap-4 text-black relative">
             {/* Notifications */}
-            <div ref={notificationsRef} className="relative">
-              <span
-                className="text-2xl cursor-pointer"
-                onClick={() => setShowNotifications((prev) => !prev)}
-              >
-                🔔
-              </span>
-              {showNotifications && (
-                <div className="absolute right-0 mt-2 w-56 bg-white text-black border rounded shadow-md z-20">
-                  <div className="p-4 text-sm text-gray-700">No new notifications</div>
-                </div>
-              )}
-            </div>
+             <NotificationBell />
 
             {/* Settings */}
-            <div ref={settingsRef} className="relative">
-              <span
-                className="text-2xl cursor-pointer"
-                onClick={() => setShowSettings((prev) => !prev)}
-              >
-                ⚙️
-              </span>
-              {showSettings && (
-                <div className="absolute right-0 mt-2 w-40 bg-white text-black border rounded shadow-md z-20">
-                  <button
-                    onClick={handleLogout}
-                    className="block w-full text-left px-4 py-2 hover:bg-gray-100"
-                  >
-                    Logout
-                  </button>
-                </div>
-              )}
-            </div>
+            <SettingsMenu />
           </div>
         </div>
 

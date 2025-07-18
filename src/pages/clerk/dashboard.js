@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import withAuth from '@/utils/withAuth';
 import { FiArrowRight } from 'react-icons/fi';
-
+import NotificationBell from "@/components/shared/NotificationBell";
+import SettingsMenu from "@/components/shared/SettingsMenu";
 const ClerkDashboard = () => {
   const [issues, setIssues] = useState([]);
   const [stats, setStats] = useState({
@@ -95,8 +96,8 @@ const ClerkDashboard = () => {
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-4xl font-bold text-orange-500">Clerk Dashboard</h2>
           <div className="flex items-center gap-4 text-black">
-            <span className="text-2xl">🔔</span>
-            <span className="text-2xl">⚙️</span>
+            <NotificationBell />
+            <SettingsMenu />
           </div>
         </div>
 

@@ -2,6 +2,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import withAuth from '@/utils/withAuth';
+import NotificationBell from "@/components/shared/NotificationBell";
+import SettingsMenu from "@/components/shared/SettingsMenu";
 
 const AdminReports = () => {
   const [issues, setIssues] = useState([]);
@@ -67,7 +69,14 @@ const AdminReports = () => {
     <div className="flex min-h-screen font-sans">
       {/* Left - Report List */}
       <div className="w-2/3 bg-[#fdfaf5] p-8 overflow-y-auto">
-        <h2 className="text-4xl font-bold text-orange-500 mb-6">Reports (Admin)</h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-4xl font-bold text-orange-500">Reports (Admin)</h2>
+          <div className="flex items-center gap-4 text-black">
+           <NotificationBell />
+           <SettingsMenu />
+         </div>
+      </div>
+
 
         {/* Filters */}
         <div className="mb-6 grid grid-cols-3 gap-4">

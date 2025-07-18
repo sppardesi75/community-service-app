@@ -1,5 +1,7 @@
 import { connectToDatabase } from "@/lib/mongodb";
 import Issue from "@/models/Issue";
+import User from "@/models/User";
+import Notification from "@/models/Notification";
 import { verifyToken } from "@/middleware/auth";
 import mongoose from "mongoose";
 
@@ -24,7 +26,6 @@ export default async function handler(req, res) {
     }
 
     const issueObjectId = new mongoose.Types.ObjectId(issueId);
-
     const issue = await Issue.findById(issueObjectId);
 
     if (!issue) {
@@ -33,6 +34,15 @@ export default async function handler(req, res) {
 
     issue.assignedClerk = clerkId;
     await issue.save();
+
+    // ✅ Create a notification for the assigned clerk
+    await Notification.create({
+      userId: clerkId,
+      message: `You have been assigned to issue: ${issue.title}`,
+      type: "Assignment",
+      read: false,
+      createdAt: new Date()
+    });
 
     return res.status(200).json({ message: "Issue assigned to clerk successfully" });
   } catch (err) {

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
+import NotificationBell from "@/components/shared/NotificationBell";
+import SettingsMenu from "@/components/shared/SettingsMenu";
 
 const MapDisplay = dynamic(() => import('@/components/MapDisplay'), { ssr: false });
 
@@ -142,7 +144,12 @@ export default function AdminIssueDetails() {
       <div className="flex-1 p-8 pr-0 flex flex-col">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-4xl font-bold text-orange-500">Issue Details (Admin)</h1>
+            <div className="flex items-center gap-4 text-black">
+              <NotificationBell />
+             <SettingsMenu />
+            </div>
         </div>
+
         <div className="flex-1 overflow-y-auto pr-8">
           <div className="mb-4">
             <div className="text-2xl font-bold mb-2">{issue.title}</div>

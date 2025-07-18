@@ -2,6 +2,7 @@ import { connectToDatabase } from "@/lib/mongodb";
 import Issue from "@/models/Issue";
 import { verifyToken } from "@/middleware/auth";
 import mongoose from "mongoose";
+import Notification from "@/models/Notification";
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -101,6 +102,17 @@ export default async function handler(req, res) {
     });
 
     await issue.save();
+
+    // Notify the resident who reported the issue
+    await Notification.create({
+      userId: issue.userId, // resident's ID
+      message: `Your issue "${issue.title}" was updated to "${status}".`,
+      type: "Update",
+      read: false,
+      createdAt: new Date()
+    });
+
+
 
     return res.status(200).json({
       message: "Issue updated successfully",

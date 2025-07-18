@@ -95,7 +95,13 @@ export default async function handler(req, res) {
         status: "Pending Approval",
         userId,
         images: imagePaths,
-        updates: ["Issue submitted and pending approval"]
+        updates: [
+          {
+            text: "Issue submitted and pending approval",
+            status: "Pending Approval",
+            timestamp: new Date(), // Automatically set the current timestamp
+          },
+        ],
       });
 
       await issue.save();
