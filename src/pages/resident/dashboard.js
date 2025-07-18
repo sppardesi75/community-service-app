@@ -40,36 +40,71 @@ function ResidentDashboard() {
     setTimeout(fetchIssues, 100);
   }, [success]);
 
+  const uploadToCloudinary = async (file) => {
+    const data = new FormData();
+    data.append("file", file);
+    data.append("upload_preset", "unsigned_community_upload"); // must match your Cloudinary preset name
+    data.append("cloud_name", "dcdorfdv7");
+  
+    const res = await fetch("https://api.cloudinary.com/v1_1/dcdorfdv7/image/upload", {
+      method: "POST",
+      body: data,
+    });
+  
+    const result = await res.json();
+    return result.secure_url; // this is the hosted URL of the uploaded image
+  };
+  
+  
+
+
+
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSuccess("");
     setError("");
-
+  
     try {
       const token = localStorage.getItem("token");
-      const body = new FormData();
-      Object.entries(formData).forEach(([key, value]) => body.append(key, value));
-      images.forEach((imgObj) => body.append("images", imgObj.file));
-      body.append("latitude", latLng.lat);
-      body.append("longitude", latLng.lng);
-
+  
+      // Step 1: Upload all images to Cloudinary
+      const uploadedUrls = await Promise.all(
+        images.map((img) => uploadToCloudinary(img.file))
+      );
+  
+      // Step 2: Build the body with Cloudinary URLs
+      const body = {
+        ...formData,
+        latitude: latLng.lat,
+        longitude: latLng.lng,
+        images: uploadedUrls,
+      };
+  
+      // Step 3: Submit to your API
       const res = await fetch("/api/report", {
         method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
       });
-
+  
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || data.message || "Submission failed");
       }
-
+  
       setSuccess("Complaint submitted successfully!");
       handleClear();
     } catch (err) {
+      console.error("Submit error:", err);
       setError(err.message);
     }
   };
+  
 
   const handleClear = () => {
     setFormData({ title: "", category: "", description: "", location: "" });
