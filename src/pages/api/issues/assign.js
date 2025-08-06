@@ -4,6 +4,7 @@ import User from "@/models/User";
 import Notification from "@/models/Notification";
 import { verifyToken } from "@/middleware/auth";
 import mongoose from "mongoose";
+import { sendIssueAssignmentEmail } from "@/utils/mailer";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -43,6 +44,21 @@ export default async function handler(req, res) {
       read: false,
       createdAt: new Date()
     });
+
+    // Send email notification to the assigned clerk
+    try {
+      const clerk = await User.findById(clerkId);
+      if (clerk && clerk.email) {
+        await sendIssueAssignmentEmail(
+          clerk.email,
+          clerk.name,
+          issue.title
+        );
+      }
+    } catch (emailError) {
+      console.error("Failed to send email notification:", emailError);
+      // Don't fail the request if email fails
+    }
 
     return res.status(200).json({ message: "Issue assigned to clerk successfully" });
   } catch (err) {

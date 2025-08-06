@@ -1,6 +1,8 @@
 import { connectToDatabase } from "@/lib/mongodb";
 import Issue from "@/models/Issue";
+import User from "@/models/User";
 import { verifyToken } from "@/middleware/auth";
+import { sendIssueCreatedEmail } from "@/utils/mailer";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -46,6 +48,23 @@ export default async function handler(req, res) {
         },
       ],
     });
+
+    // Send email notification to the user who reported the issue
+    try {
+      const user = await User.findById(userId);
+      if (user && user.email) {
+        await sendIssueCreatedEmail(
+          user.email,
+          user.name,
+          title,
+          category,
+          location
+        );
+      }
+    } catch (emailError) {
+      console.error("Failed to send email notification:", emailError);
+      // Don't fail the request if email fails
+    }
 
     return res.status(201).json({ message: "Issue reported successfully", issue });
   } catch (err) {

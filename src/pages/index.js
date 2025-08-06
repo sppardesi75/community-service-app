@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import LanguageToggle from "@/components/LanguageToggle";
 
-
 export default function HomePage() {
   const router = useRouter();
   const { t } = useTranslation();
@@ -90,6 +89,179 @@ export default function HomePage() {
           <p>{t("about_text_1")}</p>
           <p>{t("about_text_2")}</p>
           <p>{t("about_text_3")}</p>
+        </div>
+      </section>
+
+      {/* Benefits Comparison Section */}
+      <section className="mt-20 px-6 sm:px-10 text-center">
+        <h3 className="text-3xl font-bold mb-2 text-orange-500 transition duration-300">
+          {t("benefits_title")}
+        </h3>
+        <p className="text-lg text-gray-300 mb-12">{t("benefits_subtitle")}</p>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
+          {/* Traditional Process */}
+          <div className="bg-red-900/20 border border-red-500/30 rounded-xl p-8">
+            <h4 className="text-2xl font-bold text-red-400 mb-6">{t("traditional_process")}</h4>
+            <div className="space-y-4 text-left">
+              <div className="flex items-center space-x-3">
+                <span className="text-red-400 text-xl">❌</span>
+                <span className="text-gray-300">{t("traditional_step_1")}</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <span className="text-red-400 text-xl">❌</span>
+                <span className="text-gray-300">{t("traditional_step_2")}</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <span className="text-red-400 text-xl">❌</span>
+                <span className="text-gray-300">{t("traditional_step_3")}</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <span className="text-red-400 text-xl">❌</span>
+                <span className="text-gray-300">{t("traditional_step_4")}</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <span className="text-red-400 text-xl">❌</span>
+                <span className="text-gray-300">{t("traditional_step_5")}</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <span className="text-red-400 text-xl">❌</span>
+                <span className="text-gray-300">{t("traditional_step_6")}</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <span className="text-red-400 text-xl">❌</span>
+                <span className="text-gray-300">{t("traditional_step_7")}</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <span className="text-red-400 text-xl">❌</span>
+                <span className="text-gray-300">{t("traditional_step_8")}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Digital Solution */}
+          <div className="bg-green-900/20 border border-green-500/30 rounded-xl p-8">
+            <h4 className="text-2xl font-bold text-green-400 mb-6">{t("digital_solution")}</h4>
+            <div className="space-y-4 text-left">
+              <div className="flex items-center space-x-3">
+                <span className="text-green-400 text-xl">✅</span>
+                <span className="text-gray-300">{t("digital_step_1")}</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <span className="text-green-400 text-xl">✅</span>
+                <span className="text-gray-300">{t("digital_step_2")}</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <span className="text-green-400 text-xl">✅</span>
+                <span className="text-gray-300">{t("digital_step_3")}</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <span className="text-green-400 text-xl">✅</span>
+                <span className="text-gray-300">{t("digital_step_4")}</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <span className="text-green-400 text-xl">✅</span>
+                <span className="text-gray-300">{t("digital_step_5")}</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <span className="text-green-400 text-xl">✅</span>
+                <span className="text-gray-300">{t("digital_step_6")}</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <span className="text-green-400 text-xl">✅</span>
+                <span className="text-gray-300">{t("digital_step_7")}</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <span className="text-green-400 text-xl">✅</span>
+                <span className="text-gray-300">{t("digital_step_8")}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Key Metrics */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-16 max-w-4xl mx-auto">
+          <div className="bg-[#1a1a1a] p-6 rounded-xl">
+            <h5 className="text-2xl font-bold text-orange-400 mb-2">{t("time_saved")}</h5>
+            <p className="text-gray-300 text-sm">{t("time_saved_desc")}</p>
+          </div>
+          <div className="bg-[#1a1a1a] p-6 rounded-xl">
+            <h5 className="text-2xl font-bold text-orange-400 mb-2">{t("transparency")}</h5>
+            <p className="text-gray-300 text-sm">{t("transparency_desc")}</p>
+          </div>
+          <div className="bg-[#1a1a1a] p-6 rounded-xl">
+            <h5 className="text-2xl font-bold text-orange-400 mb-2">{t("efficiency")}</h5>
+            <p className="text-gray-300 text-sm">{t("efficiency_desc")}</p>
+          </div>
+          <div className="bg-[#1a1a1a] p-6 rounded-xl">
+            <h5 className="text-2xl font-bold text-orange-400 mb-2">{t("accessibility")}</h5>
+            <p className="text-gray-300 text-sm">{t("accessibility_desc")}</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Key Features Section */}
+      <section className="mt-20 px-6 sm:px-10 py-12 bg-[#111] text-center">
+        <h3 className="text-3xl font-bold text-orange-500 mb-12 tracking-wide">
+          {t("features_title")}
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+          <div className="bg-[#1a1a1a] p-6 rounded-xl hover:shadow-lg hover:shadow-orange-500/20 transition-all duration-300">
+            <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-white font-bold text-xl">⚡</span>
+            </div>
+            <h4 className="text-lg font-bold text-white mb-2">{t("feature_1_title")}</h4>
+            <p className="text-gray-300 text-sm">{t("feature_1_desc")}</p>
+          </div>
+          <div className="bg-[#1a1a1a] p-6 rounded-xl hover:shadow-lg hover:shadow-orange-500/20 transition-all duration-300">
+            <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-white font-bold text-xl">📊</span>
+            </div>
+            <h4 className="text-lg font-bold text-white mb-2">{t("feature_2_title")}</h4>
+            <p className="text-gray-300 text-sm">{t("feature_2_desc")}</p>
+          </div>
+          <div className="bg-[#1a1a1a] p-6 rounded-xl hover:shadow-lg hover:shadow-orange-500/20 transition-all duration-300">
+            <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-white font-bold text-xl">🔔</span>
+            </div>
+            <h4 className="text-lg font-bold text-white mb-2">{t("feature_3_title")}</h4>
+            <p className="text-gray-300 text-sm">{t("feature_3_desc")}</p>
+          </div>
+          <div className="bg-[#1a1a1a] p-6 rounded-xl hover:shadow-lg hover:shadow-orange-500/20 transition-all duration-300">
+            <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-white font-bold text-xl">🌐</span>
+            </div>
+            <h4 className="text-lg font-bold text-white mb-2">{t("feature_4_title")}</h4>
+            <p className="text-gray-300 text-sm">{t("feature_4_desc")}</p>
+          </div>
+          <div className="bg-[#1a1a1a] p-6 rounded-xl hover:shadow-lg hover:shadow-orange-500/20 transition-all duration-300">
+            <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-white font-bold text-xl">📸</span>
+            </div>
+            <h4 className="text-lg font-bold text-white mb-2">{t("feature_5_title")}</h4>
+            <p className="text-gray-300 text-sm">{t("feature_5_desc")}</p>
+          </div>
+          <div className="bg-[#1a1a1a] p-6 rounded-xl hover:shadow-lg hover:shadow-orange-500/20 transition-all duration-300">
+            <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-white font-bold text-xl">📍</span>
+            </div>
+            <h4 className="text-lg font-bold text-white mb-2">{t("feature_6_title")}</h4>
+            <p className="text-gray-300 text-sm">{t("feature_6_desc")}</p>
+          </div>
+          <div className="bg-[#1a1a1a] p-6 rounded-xl hover:shadow-lg hover:shadow-orange-500/20 transition-all duration-300">
+            <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-white font-bold text-xl">🚨</span>
+            </div>
+            <h4 className="text-lg font-bold text-white mb-2">{t("feature_7_title")}</h4>
+            <p className="text-gray-300 text-sm">{t("feature_7_desc")}</p>
+          </div>
+          <div className="bg-[#1a1a1a] p-6 rounded-xl hover:shadow-lg hover:shadow-orange-500/20 transition-all duration-300">
+            <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-white font-bold text-xl">📈</span>
+            </div>
+            <h4 className="text-lg font-bold text-white mb-2">{t("feature_8_title")}</h4>
+            <p className="text-gray-300 text-sm">{t("feature_8_desc")}</p>
+          </div>
         </div>
       </section>
 
