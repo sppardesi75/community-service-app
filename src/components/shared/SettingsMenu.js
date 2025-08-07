@@ -25,13 +25,27 @@ export default function SettingsMenu() {
     <div className="relative" ref={ref}>
       <button onClick={() => setOpen(!open)} className="text-2xl">⚙️</button>
       {open && (
-        <div className="absolute right-0 mt-2 bg-white text-black border rounded-md shadow-md z-50">
-          <button
-            onClick={handleLogout}
-            className="block w-full px-4 py-2 text-left hover:bg-gray-100"
-          >
-            🚪 Logout
-          </button>
+        <div className="absolute right-0 mt-2 bg-white text-black border rounded-lg shadow-lg z-50 min-w-[200px]">
+          <div className="p-4 border-b border-gray-200">
+            <div className="flex items-center justify-between">
+              <h3 className="font-bold text-lg">Settings</h3>
+              <button
+                onClick={() => setOpen(false)}
+                className="text-gray-500 hover:text-gray-700 text-xl"
+              >
+                ×
+              </button>
+            </div>
+          </div>
+          
+          <div className="p-4">
+            <button
+              onClick={handleLogout}
+              className="w-full px-4 py-2 text-red-600 border border-red-600 rounded-full hover:bg-red-600 hover:text-white transition-colors"
+            >
+              Log Out
+            </button>
+          </div>
         </div>
       )}
     </div>

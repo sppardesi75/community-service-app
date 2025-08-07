@@ -1,9 +1,11 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import withAuth from "@/utils/withAuth";
-import MapDisplay from "@/components/MapDisplay";
+import dynamic from 'next/dynamic';
 import NotificationBell from "@/components/shared/NotificationBell";
 import SettingsMenu from "@/components/shared/SettingsMenu";
+
+const MapDisplay = dynamic(() => import('@/components/MapDisplay'), { ssr: false });
 
 const STATUS_COLORS = {
   'Pending Approval': 'bg-blue-200 text-blue-900',
@@ -28,9 +30,6 @@ function ClerkIssueDetailsPage() {
   const [message, setMessage] = useState("");
   const [newStatus, setNewStatus] = useState("");
   const [updateText, setUpdateText] = useState("");
-  const [showEscalation, setShowEscalation] = useState(false);
-  const [escalationPriority, setEscalationPriority] = useState("High");
-  const [escalationReason, setEscalationReason] = useState("");
 
   useEffect(() => {
     if (!id) return;
@@ -96,43 +95,15 @@ function ClerkIssueDetailsPage() {
     }
   };
 
-  const handleEscalation = async () => {
-    if (!escalationReason.trim() || escalationReason.trim().length < 10) {
-      setMessage("Please provide a detailed escalation reason (minimum 10 characters)");
-      return;
-    }
-
-    try {
-      const token = localStorage.getItem("token");
-      const res = await fetch(`/api/issues/${id}/escalate`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          priority: escalationPriority,
-          reason: escalationReason.trim(),
-        }),
-      });
-
-      const data = await res.json();
-      if (res.ok) {
-        setMessage("Issue escalated successfully!");
-        setShowEscalation(false);
-        setEscalationReason("");
-        fetchIssueDetails();
-      } else {
-        setMessage(data.message || "Failed to escalate issue");
-      }
-    } catch (err) {
-      setMessage("Error escalating issue");
-    }
+  const handleClear = () => {
+    setUpdateText("");
+    setMessage("");
+    setNewStatus(issue?.status || "");
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#fdfaf5] flex items-center justify-center">
+      <div className="min-h-screen bg-[#f8f7f3] flex items-center justify-center">
         <div className="text-2xl font-bold text-orange-500">Loading...</div>
       </div>
     );
@@ -140,212 +111,167 @@ function ClerkIssueDetailsPage() {
 
   if (!issue) {
     return (
-      <div className="min-h-screen bg-[#fdfaf5] flex items-center justify-center">
+      <div className="min-h-screen bg-[#f8f7f3] flex items-center justify-center">
         <div className="text-2xl font-bold text-red-500">Issue not found</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex font-sans">
-      <div className="w-2/3 bg-[#fdfaf5] p-8 overflow-y-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-4xl font-bold text-orange-500">Issue Details</h2>
+    <div className="min-h-screen flex bg-[#f8f7f3]">
+      <div className="flex-1 p-8 pr-0 flex flex-col">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-4xl font-bold text-orange-500">Issue Details (Clerk)</h1>
           <div className="flex items-center gap-4 text-black">
             <NotificationBell />
             <SettingsMenu />
           </div>
         </div>
 
-        <div className="bg-white p-8 rounded-xl shadow-lg mb-6">
-          <div className="flex justify-between items-start mb-4">
-            <h3 className="text-2xl font-bold text-gray-900">{issue.title}</h3>
-            <div className="flex gap-2">
-              <span className={`px-3 py-1 rounded-full text-sm font-medium ${STATUS_COLORS[issue.status]}`}>
-                {issue.status}
-              </span>
-              <span className={`px-3 py-1 rounded-full text-sm font-medium ${PRIORITY_COLORS[issue.priority || 'Medium']}`}>
-                {issue.priority || 'Medium'}
-              </span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-6 mb-6">
-            <div>
-              <p className="text-sm text-gray-600">Category</p>
-              <p className="font-semibold">{issue.category}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">Location</p>
-              <p className="font-semibold">{issue.location}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">Reported On</p>
-              <p className="font-semibold">{new Date(issue.createdAt).toLocaleDateString()}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">Last Updated</p>
-              <p className="font-semibold">{new Date(issue.updatedAt).toLocaleDateString()}</p>
-            </div>
-          </div>
-
-          <div className="mb-6">
-            <p className="text-sm text-gray-600 mb-2">Description</p>
-            <p className="text-gray-900">{issue.description}</p>
-          </div>
-
-          {issue.images && issue.images.length > 0 && (
-            <div className="mb-6">
-              <p className="text-sm text-gray-600 mb-2">Images</p>
-              <div className="grid grid-cols-2 gap-4">
-                {issue.images.map((image, idx) => (
-                  <img
-                    key={idx}
-                    src={image}
-                    alt={`Issue image ${idx + 1}`}
-                    className="w-full h-48 object-cover rounded-lg"
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="mb-6">
-            <p className="text-sm text-gray-600 mb-2">Updates</p>
-            <div className="space-y-3">
-              {issue.updates && issue.updates.length > 0 ? (
-                issue.updates.map((update, idx) => (
-                  <div key={idx} className="bg-gray-50 p-4 rounded-lg">
-                    <div className="flex justify-between items-start mb-2">
-                      <span className={`px-2 py-1 rounded text-xs font-medium ${STATUS_COLORS[update.status]}`}>
-                        {update.status}
-                      </span>
-                      <span className="text-xs text-gray-500">
-                        {new Date(update.timestamp).toLocaleString()}
-                      </span>
-                    </div>
-                    <p className="text-gray-900">{update.text}</p>
-                  </div>
-                ))
-              ) : (
-                <p className="text-gray-500">No updates yet</p>
-              )}
-            </div>
-          </div>
-
-          {issue.feedbacks?.length > 0 && (
-            <div className="mt-12">
-              <h3 className="text-xl font-bold mb-4 text-gray-900">Feedback by client</h3>
-              {issue.feedbacks.map((fb, idx) => (
-                <div key={idx} className="bg-white p-6 rounded-xl border border-gray-300 mb-4">
-                  <div className="flex items-center mb-2">
-                    {[1, 2, 3, 4, 5].map(star => (
-                      <span key={star} className={`text-xl ${fb.rating >= star ? 'text-yellow-400' : 'text-gray-300'}`}>★</span>
-                    ))}
-                  </div>
-                  {fb.comment && <p className="text-gray-700">{fb.comment}</p>}
-                </div>
-              ))}
-            </div>
-          )}
+        <div className="flex-1 overflow-y-auto pr-8">
+  {/* Updated Issue Information UI */}
+  <div className="bg-white rounded-xl p-6 shadow-lg mb-6">
+    <div className="flex justify-between items-start mb-4">
+      <div>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">{issue.title}</h2>
+        <div className="flex items-center gap-4">
+          <span className="px-3 py-1 bg-orange-100 text-orange-800 rounded-full font-semibold">
+            {issue.category}
+          </span>
+          <span className={`px-3 py-1 rounded-full font-semibold ${STATUS_COLORS[issue.status]}`}>
+            {issue.status}
+          </span>
         </div>
       </div>
+      <div className="text-right text-gray-600">
+        <p>Reported: {new Date(issue.createdAt).toLocaleDateString()}</p>
+<p>ID: {issue._id?.slice(-8)}</p>
+      </div>
+    </div>
+    
+    <div className="mb-6">
+      <h3 className="text-lg font-semibold text-gray-900 mb-2">Description</h3>
+      <p className="text-gray-700 leading-relaxed">{issue.description}</p>
+    </div>
 
-      <div className="w-1/3 bg-black text-white p-12">
-        <h2 className="text-[#FF9100] text-2xl font-bold mb-8">Update Issue</h2>
+    <div className="mb-6">
+      <h3 className="text-lg font-semibold text-gray-900 mb-2">Location</h3>
+      <p className="text-gray-700 mb-4">{issue.location}</p>
+      <div className="rounded-xl overflow-hidden border-2 border-gray-300">
+        <MapDisplay lat={issue.latitude} lng={issue.longitude} interactive={false} />
+      </div>
+    </div>
 
-        <div className="mb-6">
-          <label className="block text-sm font-medium mb-2">Status</label>
+    {issue.images?.length > 0 && (
+      <div className="mb-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">Attached Files</h3>
+        <button 
+          onClick={() => window.open(issue.images[0], '_blank')} 
+          className="w-full border border-gray-400 rounded-full py-2 flex items-center justify-center gap-2 text-lg font-semibold hover:bg-gray-100 transition"
+        >
+          <span>📎</span> Download Issue Files ({issue.images.length} file{issue.images.length > 1 ? 's' : ''})
+        </button>
+      </div>
+    )}
+  </div>
+
+  {/* Feedback Section */}
+  {issue.feedbacks?.length > 0 && (
+    <div className="bg-white rounded-xl p-6 shadow-lg mb-6">
+      <h2 className="text-xl font-bold text-gray-900 mb-4">Feedback by Client</h2>
+      <div className="space-y-4">
+        {issue.feedbacks.map((fb, idx) => (
+          <div key={idx} className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <div className="flex items-center mb-2">
+              {[1, 2, 3, 4, 5].map(star => (
+                <span key={star} className={`text-xl ${fb.rating >= star ? 'text-yellow-400' : 'text-gray-300'}`}>★</span>
+              ))}
+            </div>
+            {fb.comment && <p className="text-gray-700">{fb.comment}</p>}
+          </div>
+        ))}
+      </div>
+    </div>
+  )}
+</div>
+
+      </div>
+
+      <div className="w-1/3 bg-black text-white flex flex-col items-center p-12">
+        <h2 className="text-[#FF9100] text-2xl font-bold mb-8 w-full text-left">Update Issue</h2>
+        <div className="w-full mb-8">
+          <label className="block text-lg mb-2">Select Status</label>
           <select
+            className="w-full mb-4 bg-black border border-gray-600 rounded-md py-2 px-3 text-white"
             value={newStatus}
             onChange={(e) => setNewStatus(e.target.value)}
-            className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white"
           >
             <option value="Pending Approval">Pending Approval</option>
             <option value="Under Review">Under Review</option>
             <option value="Resolved">Resolved</option>
             <option value="Rejected">Rejected</option>
           </select>
-        </div>
 
-        <div className="mb-6">
-          <label className="block text-sm font-medium mb-2">Update Text</label>
+          <label className="block text-lg mb-2">Update Text</label>
           <textarea
+            className="w-full mb-4 bg-black border border-gray-600 rounded-md py-2 px-3 text-white min-h-[120px]"
+            placeholder="Enter update details..."
             value={updateText}
             onChange={(e) => setUpdateText(e.target.value)}
-            className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white h-32 resize-none"
-            placeholder="Provide an update on this issue..."
           />
-        </div>
 
-        <button
-          onClick={handleStatusUpdate}
-          className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg mb-4 transition"
-        >
-          Update Issue
-        </button>
-
-        {/* Escalation Section */}
-        <div className="border-t border-gray-700 pt-6">
-          <h3 className="text-xl font-bold mb-4 text-orange-500">Escalate Issue</h3>
-          
-          {!showEscalation ? (
+          <div className="flex gap-4 mt-2">
             <button
-              onClick={() => setShowEscalation(true)}
-              className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-lg transition"
+              className="flex-1 py-3 rounded-full border-2 border-[#FF9100] text-[#FF9100] text-xl font-bold hover:bg-[#ff91001a] transition"
+              onClick={handleClear}
+              disabled={loading}
             >
-              Escalate Issue
+              Clear
             </button>
-          ) : (
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">Priority Level</label>
-                <select
-                  value={escalationPriority}
-                  onChange={(e) => setEscalationPriority(e.target.value)}
-                  className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white"
-                >
-                  <option value="High">High</option>
-                  <option value="Critical">Critical</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-2">Escalation Reason</label>
-                <textarea
-                  value={escalationReason}
-                  onChange={(e) => setEscalationReason(e.target.value)}
-                  className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white h-24 resize-none"
-                  placeholder="Provide a detailed reason for escalation (minimum 10 characters)..."
-                />
-              </div>
-
-              <div className="flex gap-2">
-                <button
-                  onClick={handleEscalation}
-                  className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-lg transition"
-                >
-                  Confirm Escalation
-                </button>
-                <button
-                  onClick={() => {
-                    setShowEscalation(false);
-                    setEscalationReason("");
-                  }}
-                  className="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 rounded-lg transition"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          )}
+            <button
+              className="flex-1 py-3 rounded-full bg-[#FF9100] text-white text-xl font-bold hover:bg-orange-600 transition"
+              onClick={handleStatusUpdate}
+              disabled={loading}
+            >
+              {loading ? 'Updating...' : 'Update'}
+            </button>
+          </div>
+          {message && <div className={`mt-2 text-center ${message.includes('success') ? 'text-green-400' : 'text-red-400'}`}>{message}</div>}
         </div>
 
-        {message && (
-          <div className="mt-6 p-4 bg-gray-800 rounded-lg">
-            <p className="text-green-400">{message}</p>
+        <div className="w-full border-b border-gray-700 mb-6"></div>
+        <div className="w-full">
+<h2 className="text-[#FF9100] text-2xl font-bold mb-8 w-full text-left">Issue Updates</h2>          <div className="space-y-6 mb-12">
+          {issue.updates?.slice(0).reverse().map((update, i) => (
+            <div key={i} className="text-lg">
+              <p className="mb-3">
+                • Update {String(issue.updates.length - i).padStart(2, "0")}: {update.text}
+              </p>
+              <div
+                className={`inline-block px-4 py-2 rounded-full text-black font-bold text-sm ${
+                  update.status === "Pending Approval"
+                    ? "bg-blue-200 text-blue-900"
+                    : update.status === "Under Review"
+                    ? "bg-yellow-100 text-yellow-900"
+                    : update.status === "Resolved"
+                    ? "bg-green-100 text-green-900"
+                    : update.status === "Rejected"
+                    ? "bg-red-100 text-red-900"
+                    : "bg-white"
+                }`}
+              >
+                • {update.status}
+              </div>
+              <div>{update.timestamp && (
+          <span className="text-gray-400 text-xs italic mt-1">
+            {new Date(update.timestamp).toLocaleString()}
+          </span>
+        )}</div>
+            </div>
+            
+          ))}
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
